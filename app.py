@@ -72,7 +72,7 @@ def admin():
 
 @app.route('/ajouter_article',methods=["GET", "POST"])
 def ajouter_article():
-        if 'user' in session and session['user'] == 'administrateur':
+       
             if request.method == 'POST':
                 # Retrieve form data
                 article_data = {
@@ -91,8 +91,7 @@ def ajouter_article():
                 else:
                     flash("Erreur lors de l'ajout de l'article", "danger")
             return render_template('ajouter_article.html')
-        else:
-            return redirect(url_for('login'))
+     
     
     
 
@@ -108,7 +107,10 @@ def rechercher_article():
             if article:
                 return render_template('editer_article.html', article=article)
             else:
-                flash("Article not found", "danger")
+                message = "Article not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
                 
         
     
@@ -119,7 +121,7 @@ def editer_article():
         code_article = request.form.get('code_article')
         action = request.form.get('action')  # Récupérer l'action (edit ou delete)
         article = fun_info_article(code_article)
-
+       
         if action == 'edit':
             if article:
                 # Mettre à jour les informations de l'article
@@ -129,11 +131,13 @@ def editer_article():
                 article.quantite = request.form.get('quantite')
                 article.fournisseur = request.form.get('fournisseur')
                 article.quantite_min = request.form.get('quantite_min')
+               
 
                 
 
                 # Valider les données et committer les mises à jour
                 try:
+                    
                     db.session.commit()
                     flash("Article modifié avec succès", "success")
                     
@@ -160,8 +164,18 @@ def editer_article():
 
 @app.route('/supprimer_article')
 def supprimer_article():
-        
-            return render_template('supprimer_article.html')
+    code_article = request.form.get('code_article')  # Get the article code from the form
+
+    # Find the article in the database
+    article = Article.query.filter_by(code=code_article).first()
+
+    if article:
+        db.session.delete(article)  # Delete the article if found
+        db.session.commit()  # Commit the transaction
+        return flash('Article deleted successfully!', 'success')
+    else:
+        return flash('Article not found.', 'error')
+
         
 
 
@@ -421,6 +435,20 @@ def fun_history_ajouter_usine(data):
     db.session.add(new_history)
     db.session.commit()
     return True
+
+def fun_history_editer_article(data):
+    
+    new_history=History(
+        code_article=data['code_article'],
+        libelle_article=data['libelle_article'],
+        prix=data['prix_achat'],
+        fournisseur=data['fournisseur'],
+        action="editre un article")
+    db.session.add(new_history)
+    db.session.commit()
+    return True
+    
+
 
 def fun_info_article(code_article):
     article_data = Article.query.filter_by(code_article=code_article).first()
