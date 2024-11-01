@@ -64,11 +64,16 @@ def logout():
 # Route pour la page d'administration
 @app.route('/admin')
 def admin():
-       
-            return render_template('index.html')
+    articles_data = Article.query.all()
+    quantite_totale=0
+    for article in articles_data:
+        quantite_totale += article.quantite  # Ajoute la quantité de chaque article
+
+    return render_template('index.html',quantite_totale=quantite_totale,articles=articles_data)
        
 
-    # Route pour la connexion
+
+
 
 @app.route('/ajouter_article',methods=["GET", "POST"])
 def ajouter_article():
@@ -82,14 +87,19 @@ def ajouter_article():
                 'assignation': request.form.get('assignation'),
                 'quantite': request.form.get('quantite'),
                 'fournisseur': request.form.get('fournisseur'),
-                'quantite_min': request.form.get('quantite_min')
+                'quantite_min': request.form.get('quantite_min'),
+                'image': request.form.get('image')
             }
 
                 # Call the function to add user
                 if fun_ajouter_article(article_data):
-                    flash("Article ajouté avec succès", "success")
+                    message = "Article ajouté avec succès."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
                 else:
-                    flash("Erreur lors de l'ajout de l'article", "danger")
+                    message = "Erreur lors de l'ajout de l'article."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
             return render_template('ajouter_article.html')
      
     
@@ -125,12 +135,16 @@ def editer_article():
         if action == 'edit':
             if article:
                 # Mettre à jour les informations de l'article
+                article.code_article = request.form.get('code_article')
                 article.libelle_article = request.form.get('libelle_article')
                 article.prix_achat = request.form.get('prix')
                 article.assignation = request.form.get('assignation')
                 article.quantite = request.form.get('quantite')
                 article.fournisseur = request.form.get('fournisseur')
                 article.quantite_min = request.form.get('quantite_min')
+                article.image = request.form.get('image')
+                print(article.image)
+                print(len(article.image))
                
 
                 
@@ -139,23 +153,35 @@ def editer_article():
                 try:
                     
                     db.session.commit()
-                    flash("Article modifié avec succès", "success")
+                    message = "Article modifié avec succès."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
                     
                 except :
                     db.session.rollback()
-                    flash("Erreur lors de la mise à jour de l'article", "danger")
+                    message = "Erreur lors de la mise à jour de l'article. 1 "
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
             else:
-                flash("Article non trouvé", "danger")
+                message = "Article not found."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
 
         elif action == 'delete':
             if article:
                 # Supprimer l'article de la base de données
                 db.session.delete(article)
                 db.session.commit()
-                flash("Article supprimé avec succès", "success")
+                message = "Article supprimé avec succès."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+
+                
                
             else:
-                flash("Article non trouvé", "danger")
+                message = "Article not found."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
 
         return render_template('editer_article.html')  # Rediriger si aucune action trouvée
     
@@ -172,10 +198,18 @@ def supprimer_article():
     if article:
         db.session.delete(article)  # Delete the article if found
         db.session.commit()  # Commit the transaction
-        return flash('Article deleted successfully!', 'success')
+        message = "Article deleted successfully!."
+        # Return a JavaScript alert with the message and then redirect
+        return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
     else:
-        return flash('Article not found.', 'error')
+                message = "Article not found."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
 
+
+
+
+    # routes.py
         
 
 
@@ -202,17 +236,90 @@ def ajouter_user():
             return render_template('ajouter_user.html')
         
 
+@app.route('/rechercher_user', methods=['GET', 'POST'])
+def rechercher_user():
     
-@app.route('/editer_user')
-def editer_user():
-       
-            return render_template('editer_user.html')
+        if request.method == 'POST':
+            username = request.form.get("username")
+            user = fun_info_user(username)
+            if user:
+                return render_template('editer_user.html', user=user)
+            else:
+                message = "user not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_user')}";</script>"""
+        return render_template('editer_user.html')
         
+
+        
+@app.route('/editer_user', methods=['POST', 'GET'])
+def editer_user():
+    if request.method == 'POST':
+        print(request.form)  # Debugging: Print all submitted form data
+        id_user = request.form.get('id')
+        action = request.form.get('action')
+        print(f"Received id_user: {id_user}, action: {action}")
+
+        user = User.query.get(id_user)
+        if not user:
+            print("user not found.")
+            message = "user not found."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_user')}";</script>"""
+
+        if action == 'edit':
+            user.username = request.form.get('username')  # Correct field name
+            new_password = request.form.get('password')
+            if new_password == user.password :
+                user.password=new_password
+            else :
+                hashed_password = generate_password_hash(new_password, method='pbkdf2:sha256')
+                user.password=hashed_password
+            user.emplacement = request.form.get('emplacement')
+            user.numero_telephone = request.form.get('numero_telephone')
+            user.role = request.form.get('role')  # Make sure this is in the form
+            print("Updating user details")
+            print(user)
+            try:
+                db.session.commit()
+                message = "user modifié avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_user')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la mise à jour du user: {e}"
+                print(message)
+                return f"""<script>alert("{message}");</script>"""
+
+        elif action == 'delete':
+            print("Attempting to delete user")
+            try:
+                db.session.delete(user)
+                db.session.commit()
+                message = "user supprimé avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_user')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la suppression user: {e}"
+                print(message)
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_user')}";</script>"""
+
+    return render_template('editer_user.html')
+
     
 @app.route('/supprimer_user')
 def supprimer_user():
-        
-            return render_template('supprimer_user.html')
+
+    username = request.form.get('username') 
+    user = User.query.filter_by(username=username).first()
+    if user:
+        db.session.delete(user)  
+        db.session.commit() 
+        message = "User deleted successfully!."
+        return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+    else:
+        message = "User not found."
+        return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+    
         
         
 
@@ -240,11 +347,74 @@ def ajouter_usine():
         
 
 
-@app.route('/editer_usine')
-def editer_usine():
-       
-            return render_template('editer_usine.html')
+   
         
+@app.route('/rechercher_usine', methods=['GET', 'POST'])
+def rechercher_usine():
+    
+        if request.method == 'POST':
+            nom_usine = request.form.get("nom_usine")
+            usine = fun_info_usine(nom_usine)
+            if usine:
+                return render_template('editer_usine.html', usine=usine)
+            else:
+                message = "Usine not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_usine')}";</script>"""
+        return render_template('editer_usine.html')
+        
+    
+        
+@app.route('/editer_usine', methods=['POST', 'GET'])
+def editer_usine():
+    if request.method == 'POST':
+        print(request.form)  # Debugging: Print all submitted form data
+        id_usine = request.form.get('id_usine')
+        action = request.form.get('action')
+        print(f"Received id_usine: {id_usine}, action: {action}")
+
+        usine = Usine.query.get(id_usine)
+        if not usine:
+            print("Usine not found.")
+            message = "Usine not found."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_usine')}";</script>"""
+
+        if action == 'edit':
+            usine.nom_usine = request.form.get('nom_usine')  # Correct field name
+            usine.region = request.form.get('region')
+            usine.adresse = request.form.get('adresse')
+            usine.latitude = request.form.get('latitude')
+            usine.longitude = request.form.get('longitude')
+            usine.telephone = request.form.get('telephone')
+            usine.etat = request.form.get('etat')  # Make sure this is in the form
+            print("Updating usine details")
+            print(usine)
+            try:
+                db.session.commit()
+                message = "Usine modifié avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_usine')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la mise à jour du usine: {e}"
+                print(message)
+                return f"""<script>alert("{message}");</script>"""
+
+        elif action == 'delete':
+            print("Attempting to delete usine")
+            try:
+                db.session.delete(usine)
+                db.session.commit()
+                message = "Usine supprimé avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_usine')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la suppression usine: {e}"
+                print(message)
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_usine')}";</script>"""
+
+    return render_template('editer_usine.html')
+
     
 @app.route('/supprimer_usine')
 def supprimer_usine():
@@ -273,11 +443,72 @@ def ajouter_fournisseur():
         
         
         
+@app.route('/rechercher_fournisseur', methods=['GET', 'POST'])
+def rechercher_fournisseur():
+    
+        if request.method == 'POST':
+            nom_fournisseur = request.form.get("nom_fournisseur")
+            fournisseur = fun_info_fournisseur(nom_fournisseur)
+            if fournisseur:
+                return render_template('editer_fournisseur.html', fournisseur=fournisseur)
+            else:
+                message = "Fournisseur not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_fournisseur')}";</script>"""
+        return render_template('editer_fournisseur.html')
         
-@app.route('/editer_fournisseur')
+    
+        
+@app.route('/editer_fournisseur', methods=['POST', 'GET'])
 def editer_fournisseur():
-       
-            return render_template('editer_fournisseur.html')
+    if request.method == 'POST':
+        id_fournisseur = request.form.get('id_fournisseur')  # Retrieve id_fournisseur
+        action = request.form.get('action')  # Retrieve the action (edit or delete)
+        print(f"Received id_fournisseur: {id_fournisseur}, action: {action}")  # Debug statement
+
+        # Use ID to find the fournisseur
+        fournisseur = Fournisseur.query.get(id_fournisseur)
+        if not fournisseur:
+            print("Fournisseur not found.")  # Debug statement
+            message = "Fournisseur not found."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_fournisseur')}";</script>"""
+
+        if action == 'edit':
+            # Update fournisseur details
+            fournisseur.nom_fournisseur = request.form.get('nom_fournisseur')
+            fournisseur.matricule_fiscale = request.form.get('matricule_fiscale')
+            fournisseur.adresse = request.form.get('adresse')
+            fournisseur.telephone = request.form.get('telephone')
+            print("Updating fournisseur details")  # Debug statement
+            print(fournisseur)
+            try:
+                db.session.commit()
+                message = "Fournisseur modifié avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_fournisseur')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la mise à jour du fournisseur: {e}"
+                print(message)  # Debug statement
+                return f"""<script>alert("{message}");</script>"""
+
+        elif action == 'delete':
+            # Delete the fournisseur
+            print("Attempting to delete fournisseur")  # Debug statement
+            try:
+                db.session.delete(fournisseur)
+                db.session.commit()
+                message = "Fournisseur supprimé avec succès."
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_fournisseur')}";</script>"""
+            except Exception as e:
+                db.session.rollback()
+                message = f"Erreur lors de la suppression du fournisseur: {e}"
+                print(message)  # Debug statement
+                return f"""<script>alert("{message}");window.location.href = "{url_for('rechercher_fournisseur')}";</script>"""
+
+    # Render the edit form if the request method is GET
+    return render_template('editer_fournisseur.html')  # Show the form if no action found
+
        
         
 @app.route('/supprimer_fournisseur')
@@ -453,10 +684,18 @@ def fun_history_editer_article(data):
 def fun_info_article(code_article):
     article_data = Article.query.filter_by(code_article=code_article).first()
     return article_data
+
+def fun_info_fournisseur(nom_fournisseur):
+    fournisseur_data = Fournisseur.query.filter_by(nom_fournisseur=nom_fournisseur).first()
+    return fournisseur_data
                 
+def fun_info_usine(nom_usine):
+    usine_data = Usine.query.filter_by(nom_usine=nom_usine).first()
+    return usine_data
 
-
-
+def fun_info_user(username):
+     user_data=User.query.filter_by(username=username).first()
+     return user_data
 
 
 # User Model
@@ -481,6 +720,7 @@ class Article(db.Model):
     fournisseur = db.Column(db.String(255), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     quantite_min = db.Column(db.Integer, nullable=False)
+    image=db.Column(db.String(255),nullable=True)
 
 # Supplier Model (Fournisseur)
 class Fournisseur(db.Model):

@@ -31,13 +31,231 @@
     
 
 </head>
-
 <body>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
 
- 
+       
+
+
+
+        <!-- ========== App Menu ========== -->
+        <div class="app-menu navbar-menu">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <!-- Dark Logo-->
+                <a href="index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
+                <!-- Light Logo-->
+                <a href="index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-light.png" alt="" height="17">
+                    </span>
+                </a>
+                <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+                    <i class="ri-record-circle-line"></i>
+                </button>
+            </div>
+    
+            <div class="dropdown sidebar-user m-1 rounded">
+                <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="d-flex align-items-center gap-2">
+                        <img class="rounded header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                        <span class="text-start">
+                            <span class="d-block fw-medium sidebar-user-name-text">Admin</span>
+                            <span class="d-block fs-14 sidebar-user-name-sub-text"><i class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span class="align-middle">Online</span></span>
+                        </span>
+                    </span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <!-- item-->
+                    <h6 class="dropdown-header">Welcome Admin</h6>
+                    <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                    <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
+                    <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
+                    <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
+                    <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+                    <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                    <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+                </div>
+            </div>
+            
+
+            <div id="scrollbar">
+                <div class="container-fluid">
+
+                        
+                    <div id="two-column-menu">
+                    </div>
+                    <ul class="navbar-nav" id="navbar-nav">
+                        <li class="menu-title">
+                            
+                            <span data-key="t-menu">Dashboard</span>
+                               
+                                
+                                    
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarArticles" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarArticles">
+                                <i class="ri-apps-2-line"></i> <span data-key="sidebarArticles">Articles</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarArticles">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/ajouter_article" class="nav-link" data-key="Ajouter-Article" >Ajouter Article</a>
+                                    </li>
+                                     
+                                    <li class="nav-item">
+                                        <a href="/editer_article" class="nav-link" data-key="Editer-Article"> Editer Article </a>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>
+                        </li> <!-- end Dashboard Menu -->
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarUsines" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsines">
+                                <i class="ri-building-4-fill"></i> <span data-key="sidebarUsines">Usines</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarUsines">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/ajouter_usine" class="nav-link" data-key="Ajouter-Usine"> Ajouter Usine </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/editer_usine" class="nav-link" data-key="Editer-Usine"> Editer Usine </a>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarFournisseurs" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarFournisseurs">
+                                <i class="ri-file-list-3-line"></i> <span data-key="sidebarFournisseurs">Fournisseurs</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarFournisseurs">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/ajouter_fournisseur" class="nav-link" data-key="Ajouter-Fournisseur"> Ajouter Fournisseur </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/editer_fournisseur" class="nav-link" data-key="Editer-Fournisseur"> Editer Fournisseur </a>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUsers">
+                                <i class="ri-account-circle-line"></i> <span data-key="sidebarUsers">Users</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarUsers">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/ajouter_user" class="nav-link" data-key="Ajouter-User"> Ajouter User </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/editer_user" class="nav-link" data-key="Editer-User"> Editer User </a>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarAchatsVentes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAchatsVentes">
+                                <i class="ri-coins-fill"></i> <span data-key="sidebarAchatsVentes">Achats Ventes</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarAchatsVentes">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Ajouter-User"> Achats </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Editer-User"> Ventes </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Ajouter-User"> Demande d'achat </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Editer-User"> Demande vente </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Ajouter-User"> Confirmer l'achat </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Editer-User"> Confirmer la vente </a>
+                                    </li>
+                                    
+                                    
+                                   
+                                </ul>
+                            </div>
+                        </li>
+
+                       
+
+                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Pages</span></li>
+
+                        
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarCharts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCharts">
+                                <i class="ri-pie-chart-line"></i> <span data-key="t-charts">Charts</span>
+                            </a>
+                            
+                        </li>
+
+                        
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarMaps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMaps">
+                                <i class="ri-map-pin-line"></i> <span data-key="t-maps">Map</span>
+                            </a>
+                            
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarChat" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarChat">
+                                <i class="ri-chat-3-fill"></i> <span data-key="sidebarChat">Chat</span>
+                            </a>
+                            
+                        </li>
+
+                        <li class="nav-item">
+                            
+                            <a href="{{ url_for('logout') }}" class="nav-link"  style="padding: 10px; margin: 10px;"><i class="ri-close-circle-line"></i>  Logout</a>
+                            
+                        </li>
+                       
+
+                    </ul>
+                </div>
+                <!-- Sidebar -->
+            </div>
+
+            <div class="sidebar-background"></div>
+        </div>
         <!-- Left Sidebar End -->
         <!-- Vertical Overlay-->
         <div class="vertical-overlay"></div>
@@ -47,144 +265,161 @@
         <!-- ============================================================== -->
         <div class="main-content">
 
-            <div class="page-content">
-                <div class="container-fluid">
+            <div id="layout-wrapper">
 
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                <h4 class="mb-sm-0">Editer Article</h4>
-
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="/">Invento</a></li>
-                                        <li class="breadcrumb-item active">Article Details</li>
-                                    </ol>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end page title -->
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row gx-lg-5">
-                                        
-                                        <!-- end col -->
-
-                          
-
-                                        <form action="{{ url_for('rechercher_article') }}" method="POST" class="app-search d-none d-md-block">
-                                            <div class="position-relative">
-                                                <input type="text" class="form-control" placeholder="Entrer le code article ..." id="code_article" name="code_article" required>
-                                                <span class="mdi mdi-magnify search-widget-icon"></span>
-                                                <button type="submit" class="btn btn-primary">Rechercher</button>
-                                            </div>
-                                        </form>
-                                        
-                                        {% if article %}
-                                        <form action="{{ url_for('editer_article') }}" method="POST">
-                                            <input type="hidden" name="code_article" value="{{ article.code_article }}">  <!-- Code article caché -->
-                                            <div class="col-xl-8 mt-4">
-                                                <div class="d-flex">
-                                                    <div class="flex-grow-1">
-                                                        <h4>{{ article.libelle_article }}</h4>
-                                                        <div class="hstack gap-3 flex-wrap">
-                                                            <div>Libelle Article: 
-                                                                <input type="text" class="form-control" value="{{ article.libelle_article }}" id="libelle_article" name="libelle_article" required>
-                                                            </div>
-                                                            <div class="vr"></div>
-                                                            <div>Assignation: 
-                                                                <input type="text" class="form-control" value="{{ article.assignation }}" id="assignation" name="assignation">
-                                                            </div>
-                                                            <div class="vr"></div>
-                                                            <div>Fournisseur: 
-                                                                <input type="text" class="form-control" value="{{ article.fournisseur }}" id="fournisseur" name="fournisseur">
-                                                            </div>
-                                                            <div class="vr"></div>
-                                                            <div>Quantité: 
-                                                                <input type="number" class="form-control" value="{{ article.quantite }}" id="quantite" name="quantite">
-                                                            </div>
-                                                            <div class="vr"></div>
-                                                            <div>Prix: 
-                                                                <input type="number" step="0.01" class="form-control" value="{{ article.prix_achat }}" id="prix" name="prix">
-                                                            </div>
-                                                            <div class="vr"></div>
-                                                            <div>Quantité Minimale: 
-                                                                <input type="number" class="form-control" value="{{ article.quantite_min }}" id="quantite_min" name="quantite_min">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Place the buttons inside the same form -->
-                                            <div class="mt-4">
-                                                <button class="btn btn-success w-100" type="submit" name="action" value="edit">Editer</button>
-                                            </div>
-                                            <div class="mt-4">
-                                                <button class="btn btn-danger w-100" type="submit" name="action" value="delete">Supprimer</button>
-                                            </div>
-                                        </form>
-                                        
-                                                <div class="col-xl-4 col-md-8 mx-auto">
-                                                    <div class="product-img-slider sticky-side-div">
-                                                        <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
-                                                            <div class="swiper-wrapper">
-                                                                <div class="swiper-slide">
-                                                                    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.harryplast.com%2Fwp-content%2Fuploads%2F2023%2F01%2Facheter-ruban-adhesif-harry-plast.png&f=1&nofb=1&ipt=f77a68b5f9c5ed08f67ebf38f992e080bb34d90fe130e13f34ba3fd68c2182a1&ipo=images" alt="" class="img-fluid d-block" />
-                                                                </div>
-                                                                <div class="swiper-slide">
-                                                                    <img src="{{ url_for('static', filename='assets/images/products/img-6.png') }}" alt="" class="img-fluid d-block" />
-                                                                </div>
-                                                                <div class="swiper-slide">
-                                                                    <img src="{{ url_for('static', filename='assets/images/products/img-1.png') }}" alt="" class="img-fluid d-block" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0"></div>
-                                            </div>
+ 
+                <!-- Left Sidebar End -->
+                <!-- Vertical Overlay-->
+                <div class="vertical-overlay"></div>
+        
+                <!-- ============================================================== -->
+                <!-- Start right Content here -->
+                <!-- ============================================================== -->
+                <div class="main-content">
+        
+                    <div class="page-content">
+                        <div class="container-fluid">
+                            
+                            <!-- start page title -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                                        <h4 class="mb-sm-0">Editer Article</h4>
+        
+                                        <div class="page-title-right">
+                                            <ol class="breadcrumb m-0">
+                                                <li class="breadcrumb-item"><a href="/">Invento</a></li>
+                                                <li class="breadcrumb-item active">Article Details</li>
+                                            </ol>
                                         </div>
-                                        
-                                        <!-- Place the buttons inside the form -->
-                                       
-                                        
-                                        {% else %}
-                                        <div class="alert alert-warning mt-4" role="alert">
-                                            Aucun article trouvé pour le code saisi.
-                                        </div>
-                                        {% endif %}
-                                        
-                                        <!-- end col -->
+        
                                     </div>
-                                    <!-- end row -->
                                 </div>
-                                <!-- end card body -->
                             </div>
-                            <!-- end card -->
+                            <!-- end page title -->
+        
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row gx-lg-5">
+                                                
+                                                <!-- end col -->
+        
+                                  
+        
+                                                <form action="{{ url_for('rechercher_article') }}" method="POST" class="app-search d-none d-md-block">
+                                                    <div class="position-relative">
+                                                        <input type="text" class="form-control" placeholder="Entrer le code article ..." id="code_article" name="code_article" required>
+                                                        <span class="mdi mdi-magnify search-widget-icon"></span>
+                                                        <button type="submit" class="btn btn-primary">Rechercher</button>
+                                                    </div>
+                                                </form>
+                                                
+                                                {% if article %}
+                                                <form action="{{ url_for('editer_article') }}" method="POST">
+                                                    <input type="hidden" name="code_article" value="{{ article.code_article }}">  <!-- Code article caché -->
+                                                    <div class="col-xl-8 mt-4">
+                                                        <div class="d-flex">
+                                                            <div class="flex-grow-1">
+                                                                <h4>{{ article.libelle_article }}</h4>
+                                                                <div class="hstack gap-3 flex-wrap">
+                                                                    <div>Code Article: 
+                                                                        <input type="text" class="form-control" value="{{ article.code_article }}" id="code_article" name="code_article" required>
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Libelle Article: 
+                                                                        <input type="text" class="form-control" value="{{ article.libelle_article }} (ne le change pas)" id="libelle_article" name="libelle_article" required>
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Assignation: 
+                                                                        <input type="text" class="form-control" value="{{ article.assignation }}" id="assignation" name="assignation">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Fournisseur: 
+                                                                        <input type="text" class="form-control" value="{{ article.fournisseur }}" id="fournisseur" name="fournisseur">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Quantité: 
+                                                                        <input type="number" class="form-control" value="{{ article.quantite }}" id="quantite" name="quantite">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Prix: 
+                                                                        <input type="number" step="0.01" class="form-control" value="{{ article.prix_achat }}" id="prix" name="prix">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Quantité Minimale: 
+                                                                        <input type="number" class="form-control" value="{{ article.quantite_min }}" id="quantite_min" name="quantite_min">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Date de Création : 
+                                                                        <input type="text" class="form-control" value="{{ article.date }}" id="date" name="date">
+                                                                    </div>
+                                                                    <div class="vr"></div>
+                                                                    <div>Image : 
+                                                                        <input type="text" class="form-control" value="{{ article.image }}" id="image" name="image">
+                                                                    </div>
+                                                                    
+                                                                                <div class="swiper-wrapper">
+                                                                                    <div class="swiper-slide">
+                                                                                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.harryplast.com%2Fwp-content%2Fuploads%2F2023%2F01%2Facheter-ruban-adhesif-harry-plast.png&f=1&nofb=1&ipt=f77a68b5f9c5ed08f67ebf38f992e080bb34d90fe130e13f34ba3fd68c2182a1&ipo=images" alt="" class="img-fluid d-block" />
+                                                                                    </div>
+                                                                                   
+                                                                                </div>
+                                                                            
+                                                                   
+        
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Place the buttons inside the same form -->
+                                                    <div class="mt-4">
+                                                        <button class="btn btn-success w-100" type="submit" name="action" value="edit">Editer</button>
+                                                    </div>
+                                                    <div class="mt-4">
+                                                        <button class="btn btn-danger w-100" type="submit" name="action" value="delete">Supprimer</button>
+                                                    </div>
+                                                </form>
+                                                
+                                                        
+                                                        <div class="flex-shrink-0"></div>
+                                                    
+                                                
+                                                <!-- Place the buttons inside the form -->
+                                               
+                                                
+                                                {% else %}
+                                                <div class="alert alert-warning mt-4" role="alert">
+                                                    Aucun article trouvé pour le code saisi.
+                                                </div>
+                                                {% endif %}
+                                                
+                                                <!-- end col -->
+                                            </div>
+                                            <!-- end row -->
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+                                    <!-- end card -->
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+        
+                            
+                            
                         </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row -->
-
+                        <!-- container-fluid -->
                     
-                    
-                </div>
-                <!-- container-fluid -->
-            </div>
             <!-- End Page-content -->
 
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            <script>document.write(new Date().getFullYear())</script> © Invento.
+                            <script>document.write(new Date().getFullYear())</script> © INVENTO.
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
@@ -209,34 +444,36 @@
     <!--end back-to-top-->
 
     <!--preloader-->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
     
 
-    <!-- Theme Settings -->
-   
-
+    
     <!-- JAVASCRIPT -->
-    <script src="{{ url_for('static', filename='assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- JAVASCRIPT -->
+    
     <script src="{{ url_for('static', filename='assets/libs/simplebar/simplebar.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/libs/node-waves/waves.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/libs/node-waves/waves.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/libs/feather-icons/feather.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/js/pages/plugins/lord-icon2.1.0.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
-   
 
-    <!--Swiper slider js-->
-    
-    <script src="{{ url_for('static', filename='assets/libs/swiper/swiper-bundle.min.js') }}"></script>
-
-    <!-- ecommerce product details init -->
-    <script src="{{ url_for('static', filename='assets/js/pages/ecommerce-product-details.init.js') }}"></script>
-
-    
-    <!-- App js -->
+    <!-- App, Layout et Plugins -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
 
-    
+    <!-- ApexCharts et autres scripts dans pages -->
+    <script src="{{ url_for('static', filename='assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/dashboard-ecommerce.init.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/apexcharts-line.init.js') }}"></script>
+
 </body>
-
 
 <!-- Mirrored from themesbrand.com/velzon/html/master/apps-ecommerce-product-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:45:54 GMT -->
 </html>
