@@ -23,37 +23,42 @@
                 </th>
                 <th scope="col">Code Article</th>
                 <th scope="col">Libelle Article</th>
-                <th scope="col">Prix Achat</th>
+                <th scope="col">Prix Vente</th>
                 <th scope="col">Assignation</th>
                 <th scope="col">Quantité</th>
-                <th scope="col">Fournisseur</th>
-                <th scope="col">Quantité Minimale</th>
+                <th scope="col">Vers</th>
+                <th scope="col">Date </th>
             </tr>
         </thead>
         <tbody>
-            {% for article in articles %}
+            {% for vente in ventes %}
             <tr>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="{{ article.id }}" id="articleCheck{{ article.id }}">
-                        <label class="form-check-label" for="articleCheck{{ article.id }}"></label>
+                        <input class="form-check-input" type="checkbox" value="{{ vente.id }}" id="articleCheck{{ vente.id }}">
+                        <label class="form-check-label" for="articleCheck{{ vente.id }}"></label>
                     </div>
                 </td>
-                <td><a href="" class="fw-semibold">{{ article.code_article }}</a></td>
-                <td>{{ article.libelle_article }}</td>
-                <td>{{ article.prix_achat }}</td>
-                <td>{{ article.assignation }}</td>
-                <td><a href="" class="fw-semibold">{{ article.quantite }}</a></td>
-                <td>{{ article.fournisseur }}</td>
-                <td>{{ article.quantite_min }}</td>
+                <td><a href="" class="fw-semibold">{{ vente.code_article }}</a></td>
+                <td>{{ vente.libelle_article }}</td>
+                <td>{{ vente.prix_vente }}</td>
+                <td>{{ vente.assignation }}</td>
+                <td><a href="" class="fw-semibold">{{ vente.quantite }}</a></td>
+                <td>{{ vente.vers }}</td>
+                <td>{{ vente.date }}</td>
             </tr>
             {% endfor %}
         </tbody>
         <tfoot class="table-light">
             <tr>
-                <td colspan="5">Total</td>
-                <td>{{ quantite_totale }}</td>
+                <td colspan="3">Prix Total</td>
+                <td>{{ prix_vente_totale }}</td>
             </tr>
+            <tr>
+                <td colspan="5">Quantité Total</td>
+                <td>{{ quantite_vente_totale }}</td>
+            </tr>
+
         </tfoot>
     </table>
 </div>

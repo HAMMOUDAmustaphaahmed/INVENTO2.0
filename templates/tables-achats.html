@@ -21,17 +21,18 @@
                         <label class="form-check-label" for="responsivetableCheck"></label>
                     </div>
                 </th>
+                <th scope="col">Lot</th>
                 <th scope="col">Code Article</th>
                 <th scope="col">Libelle Article</th>
                 <th scope="col">Prix Achat</th>
                 <th scope="col">Assignation</th>
                 <th scope="col">Quantité</th>
                 <th scope="col">Fournisseur</th>
-                <th scope="col">Quantité Minimale</th>
+                <th scope="col">Date</th>               
             </tr>
         </thead>
         <tbody>
-            {% for article in articles %}
+            {% for achat in achats %}
             <tr>
                 <td>
                     <div class="form-check">
@@ -39,20 +40,25 @@
                         <label class="form-check-label" for="articleCheck{{ article.id }}"></label>
                     </div>
                 </td>
-                <td><a href="" class="fw-semibold">{{ article.code_article }}</a></td>
-                <td>{{ article.libelle_article }}</td>
-                <td>{{ article.prix_achat }}</td>
-                <td>{{ article.assignation }}</td>
-                <td><a href="" class="fw-semibold">{{ article.quantite }}</a></td>
-                <td>{{ article.fournisseur }}</td>
-                <td>{{ article.quantite_min }}</td>
+                <td><a href="" class="fw-semibold">{{ achat.lot_achat }}</a></td>
+                <td><a href="" class="fw-semibold">{{ achat.code_article }}</a></td>
+                <td>{{ achat.libelle_article }}</td>
+                <td>{{ achat.prix_achat }}</td>
+                <td>{{ achat.assignation }}</td>
+                <td><a href="" class="fw-semibold">{{ achat.quantite }}</a></td>
+                <td>{{ achat.fournisseur }}</td>
+                <td>{{ achat.date }}</td>
             </tr>
             {% endfor %}
         </tbody>
         <tfoot class="table-light">
             <tr>
-                <td colspan="5">Total</td>
-                <td>{{ quantite_totale }}</td>
+                <td colspan="4">Prix Total</td>
+                <td>{{ achat_prix_totale }}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Quantité Total</td>
+                <td>{{ achat_quantite_totale }}</td>
             </tr>
         </tfoot>
     </table>

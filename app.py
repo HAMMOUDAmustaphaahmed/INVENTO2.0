@@ -66,10 +66,36 @@ def logout():
 def admin():
     articles_data = Article.query.all()
     quantite_totale=0
+    notification_count_quantite=0
     for article in articles_data:
         quantite_totale += article.quantite  # Ajoute la quantité de chaque article
+        if article.quantite <= article.quantite_min:
+             notification_count_quantite +=1
+    
+    achats_data = Achat.query.all()
+    achat_quantite_totale=0
+    achat_prix_totale=0
+    for achat in achats_data:
+        achat_quantite_totale += achat.quantite  # Ajoute la quantité de chaque article
+        achat_prix_totale += achat.prix_achat
 
-    return render_template('index.html',quantite_totale=quantite_totale,articles=articles_data)
+    ventes_data = Vente.query.all()
+    vente_quantite_totale=0
+    vente_prix_totale=0
+    for vente in ventes_data:
+        vente_quantite_totale += vente.quantite  # Ajoute la quantité de chaque article
+        vente_prix_totale += vente.prix_vente
+    
+
+    return render_template('index.html',notification_count_quantite=int(notification_count_quantite),
+                           quantite_totale=quantite_totale,
+                           articles=articles_data,
+                           achats=achats_data,
+                           achat_quantite_totale=achat_quantite_totale,
+                           achat_prix_totale=achat_prix_totale,
+                           ventes=ventes_data,
+                           quantite_vente_totale=vente_quantite_totale,
+                           prix_vente_totale=vente_prix_totale)
        
 
 
