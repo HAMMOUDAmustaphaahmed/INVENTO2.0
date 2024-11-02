@@ -543,6 +543,114 @@ def supprimer_fournisseur():
             return render_template('editer_fournisseur.html')
         
         
+@app.route('/ajouter_demande_achat',methods=["GET", "POST"])
+def ajouter_demande_achat():
+       
+            if request.method == 'POST':
+                # Retrieve form data
+                article_data = {
+                'code_article': request.form.get('code_article'),
+                'libelle_article': request.form.get('libelle_article'),
+                'prix_achat': request.form.get('prix_achat'),
+                'assignation': request.form.get('assignation'),
+                'quantite': request.form.get('quantite'),
+                'fournisseur': request.form.get('fournisseur'),
+                'quantite_min': request.form.get('quantite_min'),
+                'image': request.form.get('image')
+            }
+
+                # Call the function to add user
+                if fun_ajouter_article(article_data):
+                    message = "Article ajouté avec succès."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
+                else:
+                    message = "Erreur lors de l'ajout de l'article."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
+            return render_template('ajouter_article.html')
+     
+    
+    
+
+
+    # routes.py
+
+@app.route('/rechercher_demande_achat', methods=['GET', 'POST'])
+def rechercher_demande_achat():
+    
+        if request.method == 'POST':
+            code_article = request.form.get("code_article")
+            article = fun_info_article(code_article)
+            if article:
+                return render_template('editer_article.html', article=article)
+            else:
+                message = "Article not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                
+        
+@app.route('/editer_demande_achat', methods=['POST','GET'])
+def editer_demande_achat():
+    
+        code_article = request.form.get('code_article')
+        action = request.form.get('action')  # Récupérer l'action (edit ou delete)
+        article = fun_info_article(code_article)
+       
+        if action == 'edit':
+            if article:
+                # Mettre à jour les informations de l'article
+                article.code_article = request.form.get('code_article')
+                article.libelle_article = request.form.get('libelle_article')
+                article.prix_achat = request.form.get('prix')
+                article.assignation = request.form.get('assignation')
+                article.quantite = request.form.get('quantite')
+                article.fournisseur = request.form.get('fournisseur')
+                article.quantite_min = request.form.get('quantite_min')
+                article.image = request.form.get('image')
+                print(article.image)
+                print(len(article.image))
+               
+
+                
+
+                # Valider les données et committer les mises à jour
+                try:
+                    
+                    db.session.commit()
+                    message = "Article modifié avec succès."
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                    
+                except :
+                    db.session.rollback()
+                    message = "Erreur lors de la mise à jour de l'article. 1 "
+                    # Return a JavaScript alert with the message and then redirect
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+            else:
+                message = "Article not found."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+
+        elif action == 'delete':
+            if article:
+                # Supprimer l'article de la base de données
+                db.session.delete(article)
+                db.session.commit()
+                message = "Article supprimé avec succès."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+
+                
+               
+            else:
+                message = "Article not found."
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+
+        return render_template('editer_article.html')  # Rediriger si aucune action trouvée
+    
 
 
 
