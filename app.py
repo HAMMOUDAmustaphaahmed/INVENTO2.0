@@ -121,9 +121,9 @@ def ajouter_article():
                 if fun_ajouter_article(article_data):
                     message = "Article ajouté avec succès."
                     # Return a JavaScript alert with the message and then redirect
-                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('index')}";</script>"""
                 else:
-                    message = "Erreur lors de l'ajout de l'article."
+                    message = "Erreur lors de l'ajout de l'article 1."
                     # Return a JavaScript alert with the message and then redirect
                     return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
             return render_template('ajouter_article.html')
@@ -694,7 +694,8 @@ def fun_ajouter_article(data):
             quantite=data['quantite'],
             fournisseur=data['fournisseur'],
             date=datetime.now(timezone.utc),
-            quantite_min=data['quantite_min']
+            quantite_min=data['quantite_min'],
+            image=data['image']
         )
 
         # Add and commit to the database
@@ -784,7 +785,7 @@ def fun_history_ajouter_article(data):
         prix=data['prix_achat'],
         action="ajout d'un nouveau article",
         fournisseur=data['fournisseur'],
-        details=str('date : ' + datetime.now(timezone.utc) + 'quantite_min : ' + data['quantite_min'])
+        details=str('date : ' + str(datetime.now(timezone.utc)) + 'quantite_min : ' + data['quantite_min'])
         )
     db.session.add(new_history)
     db.session.commit()
