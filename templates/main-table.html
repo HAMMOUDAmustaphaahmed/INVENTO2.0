@@ -1,0 +1,218 @@
+<div class="row">
+    <div class="col-xl-9 col-lg-8">
+        <div>
+            <div class="card">
+                <!-- Header avec bouton Ajouter et barre de recherche -->
+                <div class="card-header border-0">
+                    <div class="row g-4">
+                        <div class="col-sm-auto">
+                            <div>
+                                <a href="/ajouter_article" class="btn btn-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Onglets principaux -->
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#tab-articles" role="tab">
+                                        Articles <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">12</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-achats" role="tab">
+                                        Achat <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">5</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-ventes" role="tab">
+                                        Ventes
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-auto">
+                            <div id="selection-element">
+                                <div class="my-n1 d-flex align-items-center text-muted">
+                                    Select <div id="select-content" class="text-body fw-semibold px-1"></div> Result 
+                                    <button type="button" class="btn btn-link link-danger p-0 ms-3 material-shadow-none" data-bs-toggle="modal" data-bs-target="#removeItemModal">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenu des onglets -->
+                <div class="card-body">
+                    <div class="tab-content text-muted">
+                        <!-- Onglet Articles -->
+                        <div class="tab-pane active" id="tab-articles" role="tabpanel">
+                            <div class="d-flex justify-content-end mb-2">
+                                <div class="btn-group">
+                                    <button id="exportButtonArticles" type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Exporter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="exportButtonArticles">
+                                        <a class="dropdown-item" href="#"><i class="ri-file-excel-line"></i> Exporter en Excel</a>
+                                        <a class="dropdown-item" href="#"><i class="ri-file-pdf-line"></i> Exporter en PDF</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Code Article</th>
+                                            <th scope="col">Libelle Article</th>
+                                            <th scope="col">Prix Achat</th>
+                                            <th scope="col">Assignation</th>
+                                            <th scope="col">Quantité</th>
+                                            <th scope="col">Fournisseur</th>
+                                            <th scope="col">Quantité Minimale</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for article in articles %}
+                                        <tr>
+                                            <td><a class="fw-semibold">{{ article.code_article }}</a></td>
+                                            <td>{{ article.libelle_article }}</td>
+                                            <td>{{ article.prix_achat }}</td>
+                                            <td>{{ article.assignation }}</td>
+                                            <td><a class="fw-semibold">{{ article.quantite }}</a></td>
+                                            <td>{{ article.fournisseur }}</td>
+                                            <td>{{ article.quantite_min }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr>
+                                            <td colspan="4">Total</td>
+                                            <td>{{ quantite_totale }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Onglet Achats -->
+                        <div class="tab-pane" id="tab-achats" role="tabpanel">
+                            <div class="d-flex justify-content-end mb-2">
+                                <div class="btn-group">
+                                    <button id="exportButtonAchats" type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Exporter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="exportButtonAchats">
+                                        <a class="dropdown-item" href="#"><i class="ri-file-excel-line"></i> Exporter en Excel</a>
+                                        <a class="dropdown-item" href="#"><i class="ri-file-pdf-line"></i> Exporter en PDF</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Lot</th>
+                                            <th scope="col">Code Article</th>
+                                            <th scope="col">Libelle Article</th>
+                                            <th scope="col">Prix Achat</th>
+                                            <th scope="col">Assignation</th>
+                                            <th scope="col">Quantité</th>
+                                            <th scope="col">Fournisseur</th>
+                                            <th scope="col">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for achat in achats %}
+                                        <tr>
+                                            <td><a href="" class="fw-semibold">{{ achat.lot_achat }}</a></td>
+                                            <td><a href="" class="fw-semibold">{{ achat.code_article }}</a></td>
+                                            <td>{{ achat.libelle_article }}</td>
+                                            <td>{{ achat.prix_achat }}</td>
+                                            <td>{{ achat.assignation }}</td>
+                                            <td><a href="" class="fw-semibold">{{ achat.quantite }}</a></td>
+                                            <td>{{ achat.fournisseur }}</td>
+                                            <td>{{ achat.date }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        <tr>
+                                            <td colspan="3">Prix Total</td>
+                                            <td>{{ achat_prix_totale }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">Quantité Totale</td>
+                                            <td>{{ achat_quantite_totale }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Onglet Ventes -->
+                        <div class="tab-pane" id="tab-ventes" role="tabpanel">
+                            <div class="d-flex justify-content-end mb-2">
+                                <div class="btn-group">
+                                    <button id="exportButtonVentes" type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Exporter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="exportButtonVentes">
+                                        <a class="dropdown-item" href="#"><i class="ri-file-excel-line"></i> Exporter en Excel</a>
+                                        <a class="dropdown-item" href="#"><i class="ri-file-pdf-line"></i> Exporter en PDF</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            
+                                            <th scope="col">Code Article</th>
+                                            <th scope="col">Libelle Article</th>
+                                            <th scope="col">Prix Vente</th>
+                                            <th scope="col">Assignation</th>
+                                            <th scope="col">Quantité</th>
+                                            <th scope="col">Vers</th>
+                                            <th scope="col">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for vente in ventes %}
+                                        <tr>
+                                            
+                                            <td><a href="" class="fw-semibold">{{ vente.code_article }}</a></td>
+                                            <td>{{ vente.libelle_article }}</td>
+                                            <td>{{ vente.prix_vente }}</td>
+                                            <td>{{ vente.assignation }}</td>
+                                            <td><a href="" class="fw-semibold">{{ vente.quantite }}</a></td>
+                                            <td>{{ vente.vers }}</td>
+                                            <td>{{ vente.date }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot class="table-light">
+                                        
+                                        <tr>
+                                            <td colspan="4">Quantité Totale</td>
+                                            <td>{{ quantite_vente_totale }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">Total</td>
+                                            <td>{{ prix_vente_totale }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin du card body -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -84,7 +84,7 @@ def admin():
     vente_prix_totale=0
     for vente in ventes_data:
         vente_quantite_totale += vente.quantite  # Ajoute la quantité de chaque article
-        vente_prix_totale += vente.prix_vente
+        vente_prix_totale += vente.prix_vente * vente.quantite 
     
 
     return render_template('index.html',notification_count_quantite=int(notification_count_quantite),
