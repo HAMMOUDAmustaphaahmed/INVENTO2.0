@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-xl-9 col-lg-8">
-        <div>
+    <div class="col-xl-15 ">
+       
             <div class="card">
                 <!-- Header avec bouton Ajouter et barre de recherche -->
                 <div class="card-header border-0">
@@ -21,29 +21,57 @@
                             <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#tab-articles" role="tab">
-                                        Articles <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">12</span>
+                                        Articles <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ articles_count }} </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-achats" role="tab">
-                                        Achat <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">5</span>
+                                        Achats <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ achats_count }}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#tab-ventes" role="tab">
-                                        Ventes
+                                        Ventes<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ ventes_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Demandes Achats<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ demandes_achats_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Demandes Ventes<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ demandes_ventes_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Confirmation Achats<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ confirmation_achats_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Confirmation Ventes<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ confirmations_ventes_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Users<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ users_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Fournisseurs<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ fournisseurs_count }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#" role="tab">
+                                        Usines<span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">{{ usines_count }}
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-auto">
-                            <div id="selection-element">
-                                <div class="my-n1 d-flex align-items-center text-muted">
-                                    Select <div id="select-content" class="text-body fw-semibold px-1"></div> Result 
-                                    <button type="button" class="btn btn-link link-danger p-0 ms-3 material-shadow-none" data-bs-toggle="modal" data-bs-target="#removeItemModal">Remove</button>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -213,6 +241,6 @@
                 </div>
                 <!-- Fin du card body -->
             </div>
-        </div>
+        
     </div>
 </div>

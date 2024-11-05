@@ -2,100 +2,362 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
 
 
-<!-- Mirrored from themesbrand.com/velzon/html/master/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:44:28 GMT -->
+<!-- Mirrored from themesbrand.com/velzon/html/master/auth-signin-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:46:58 GMT -->
 <head>
 
     <meta charset="utf-8" />
     <title>INVENTO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard " name="description" />
-    <meta content="Themesbrand" name="HAMMOUDA Ahmed Mustapha" />
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/favicon.ico') }}">
 
-    <!-- jsvectormap css -->
-    <link href="{{ url_for('static', filename='assets/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- Swiper slider css -->
-    <link href="{{ url_for('static', filename='assets/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- Bootstrap Css -->
-    <link href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- Icons Css -->
-    <link href="{{ url_for('static', filename='assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- App Css -->
-    <link href="{{ url_for('static', filename='assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <!-- Custom Css -->
-    <link href="{{ url_for('static', filename='assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
-    
     <!-- Layout config Js -->
+    
     <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
+    <!-- Bootstrap Css -->
+    
+    <!-- Icons Css -->
+   
+    <link href="{{ url_for('static', filename='assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+   
+    <link href="{{ url_for('static', filename='assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+   
+    <link href="{{ url_for('static', filename='assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
+
+    
+    <link href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body>
-
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-       
+        <header id="page-topbar">
+    <div class="layout-width">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <!-- LOGO -->
+                <div class="navbar-brand-box horizontal-logo">
+                    <a href="index.html" class="logo logo-dark">
+                        <span class="logo-sm">
+                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="assets/images/logo-dark.png" alt="" height="17">
+                        </span>
+                    </a>
 
+                    <a href="index.html" class="logo logo-light">
+                        <span class="logo-sm">
+                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="assets/images/logo-light.png" alt="" height="17">
+                        </span>
+                    </a>
+                </div>
+
+                <button type="button" class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none" id="topnav-hamburger-icon">
+                    <span class="hamburger-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+                <script>
+                    
+                </script>
+
+                <!-- App Search-->
+              
+            </div>
+
+            <div class="d-flex align-items-center">
+
+                
+
+                
+                
+
+               
+
+                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                    <button type="button" class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bx-bell fs-22'></i>
+                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ notification_count_quantite }}<span class="visually-hidden">Notifications</span></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+
+                        <div class="dropdown-head bg-primary bg-pattern rounded-top">
+                            <div class="p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications 🔔</h6>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="px-2 pt-2">
+                                <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
+                                    <li class="nav-item waves-effect waves-light">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">
+                                            All 
+                                        </a>
+                                    </li>
+                                    <li class="nav-item waves-effect waves-light">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false">
+                                            Messages
+                                        </a>
+                                    </li>
+                                    <li class="nav-item waves-effect waves-light">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false">
+                                            Alerts
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-content position-relative" id="notificationItemsTabContent">
+                            <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
+                                <div data-simplebar style="max-height: 300px;" class="pe-2">
+                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                        <div class="d-flex">
+                                            <div class="avatar-xs me-3 flex-shrink-0">
+                                                <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-2 lh-base">Your <b>Elite</b> author Graphic
+                                                        Optimization <span class="text-secondary">reward</span> is
+                                                        ready!
+                                                    </h6>
+                                                </a>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> Just 30 sec ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
+                                                    <label class="form-check-label" for="all-notification-check01"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">Answered to your comment on the cash flow forecast's
+                                                        graph .</p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 48 min ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check02">
+                                                    <label class="form-check-label" for="all-notification-check02"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                        <div class="d-flex">
+                                            <div class="avatar-xs me-3 flex-shrink-0">
+                                                <span class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                                                    <i class='bx bx-message-square-dots'></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-2 fs-13 lh-base">You have received <b class="text-success">20</b> new messages in the conversation
+                                                    </h6>
+                                                </a>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check03">
+                                                    <label class="form-check-label" for="all-notification-check03"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">We talked about a project on linkedin.</p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 4 hrs ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="all-notification-check04">
+                                                    <label class="form-check-label" for="all-notification-check04"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="my-3 text-center view-all">
+                                        <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                            All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade py-2 ps-2" id="messages-tab" role="tabpanel" aria-labelledby="messages-tab">
+                                <div data-simplebar style="max-height: 300px;" class="pe-2">
+                                    <div class="text-reset notification-item d-block dropdown-item">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">James Lemire</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">We talked about a project on linkedin.</p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 30 min ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
+                                                    <label class="form-check-label" for="messages-notification-check01"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-2.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Angela Bernier</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">Answered to your comment on the cash flow forecast's
+                                                        graph 🔔.</p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 2 hrs ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="messages-notification-check02">
+                                                    <label class="form-check-label" for="messages-notification-check02"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-6.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Kenneth Brown</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">Mentionned you in his comment on 📃 invoice #12501.
+                                                    </p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 10 hrs ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="messages-notification-check03">
+                                                    <label class="form-check-label" for="messages-notification-check03"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-reset notification-item d-block dropdown-item">
+                                        <div class="d-flex">
+                                            <img src="assets/images/users/avatar-8.jpg" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                            <div class="flex-grow-1">
+                                                <a href="#!" class="stretched-link">
+                                                    <h6 class="mt-0 mb-1 fs-13 fw-semibold">Maureen Gibson</h6>
+                                                </a>
+                                                <div class="fs-13 text-muted">
+                                                    <p class="mb-1">We talked about a project on linkedin.</p>
+                                                </div>
+                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                    <span><i class="mdi mdi-clock-outline"></i> 3 days ago</span>
+                                                </p>
+                                            </div>
+                                            <div class="px-2 fs-15">
+                                                <div class="form-check notification-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="messages-notification-check04">
+                                                    <label class="form-check-label" for="messages-notification-check04"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="my-3 text-center view-all">
+                                        <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                            All Messages <i class="ri-arrow-right-line align-middle"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade p-4" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab"></div>
+
+                            <div class="notification-actions" id="notification-actions">
+                                <div class="d-flex text-muted justify-content-center">
+                                    Select <div id="select-content" class="text-body fw-semibold px-1">0</div> Result <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
 
 
         <!-- ========== App Menu ========== -->
         <div class="app-menu navbar-menu">
-            <!-- LOGO -->
-            <div class="navbar-brand-box">
-                <!-- Dark Logo-->
-                <a href="index.html" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="" height="17">
-                    </span>
-                </a>
-                <!-- Light Logo-->
-                <a href="index.html" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="assets/images/logo-light.png" alt="" height="17">
-                    </span>
-                </a>
-                <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
-                    <i class="ri-record-circle-line"></i>
-                </button>
-            </div>
-    
-            <div class="dropdown sidebar-user m-1 rounded">
-                <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="d-flex align-items-center gap-2">
-                        <img class="rounded header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
-                        <span class="text-start">
-                            <span class="d-block fw-medium sidebar-user-name-text">Admin</span>
-                            <span class="d-block fs-14 sidebar-user-name-sub-text"><i class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span class="align-middle">Online</span></span>
-                        </span>
-                    </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-                    <h6 class="dropdown-header">Welcome Admin</h6>
-                    <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
-                    <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
-                    <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
-                    <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
-                    <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                    <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                    <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
-                </div>
-            </div>
+           
+            
             
 
             <div id="scrollbar">
@@ -107,7 +369,7 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title">
                             
-                            <span data-key="t-menu">Dashboard</span>
+                            <span href="/index" data-key="t-menu">Dashboard</span>
                                
                                 
                                     
@@ -190,15 +452,27 @@
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarAchatsVentes" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAchatsVentes">
-                                <i class="ri-coins-fill"></i> <span data-key="sidebarAchatsVentes">Service Achats Ventes</span>
+                                <i class="ri-coins-fill"></i> <span data-key="sidebarAchatsVentes">Achats Ventes</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarAchatsVentes">
                                 <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Ajouter-User"> Achats </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Editer-User"> Ventes </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="" class="nav-link" data-key="Ajouter-User"> Demande d'achat </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="" class="nav-link" data-key="Editer-User"> Demande vente </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Ajouter-User"> Confirmer l'achat </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link" data-key="Editer-User"> Confirmer la vente </a>
                                     </li>
                                     
                                    
@@ -255,201 +529,107 @@
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content">
+    <div class="auth-page-wrapper pt-5">
+        <!-- auth page bg -->
+        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+            <div class="bg-overlay"></div>
 
-            <div id="layout-wrapper">
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+                </svg>
+            </div>
+        </div>
 
- 
-                <!-- Left Sidebar End -->
-                <!-- Vertical Overlay-->
-                <div class="vertical-overlay"></div>
-        
-                <!-- ============================================================== -->
-                <!-- Start right Content here -->
-                <!-- ============================================================== -->
-                <div class="main-content">
-        
-                    <div class="page-content">
-                        <div class="container-fluid">
-                            
-                            <!-- start page title -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                        <h4 class="mb-sm-0">Editer Article</h4>
-        
-                                        <div class="page-title-right">
-                                            <ol class="breadcrumb m-0">
-                                                <li class="breadcrumb-item"><a href="/">Invento</a></li>
-                                                <li class="breadcrumb-item active">Article Details</li>
-                                            </ol>
-                                        </div>
-        
-                                    </div>
-                                </div>
+        <!-- auth page content -->
+        <div class="auth-page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center mt-sm-5 mb-4 text-white-50">
+                            <div>
+                                
                             </div>
-                            <!-- end page title -->
-        
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row gx-lg-5">
-                                                
-                                                <!-- end col -->
-        
-                                  
-        
-                                                <form action="{{ url_for('rechercher_article') }}" method="POST" class="app-search d-none d-md-block">
-                                                    <div class="position-relative">
-                                                        <input type="text" class="form-control" placeholder="Entrer le code article ..." id="code_article" name="code_article" required>
-                                                        <span class="mdi mdi-magnify search-widget-icon"></span>
-                                                        <button type="submit" class="btn btn-primary">Rechercher</button>
-                                                    </div>
-                                                </form>
-                                                
-                                                {% if article %}
-                                                <form action="{{ url_for('editer_article') }}" method="POST">
-                                                    <input type="hidden" name="code_article" value="{{ article.code_article }}">  <!-- Code article caché -->
-                                                    <div class="col-xl-8 mt-4">
-                                                        <div class="d-flex">
-                                                            <div class="flex-grow-1">
-                                                                <h4>{{ article.libelle_article }}</h4>
-                                                                <div class="hstack gap-3 flex-wrap">
-                                                                    <div>Code Article: 
-                                                                        <input type="text" class="form-control" value="{{ article.code_article }} (ne le change pas)" id="code_article" name="code_article" required>
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Libelle Article: 
-                                                                        <input type="text" class="form-control" value="{{ article.libelle_article }} (ne le change pas)" id="libelle_article" name="libelle_article" required>
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Assignation: 
-                                                                        <input type="text" class="form-control" value="{{ article.assignation }}" id="assignation" name="assignation">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Fournisseur: 
-                                                                        <input type="text" class="form-control" value="{{ article.fournisseur }}" id="fournisseur" name="fournisseur">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Quantité: 
-                                                                        <input type="number" class="form-control" value="{{ article.quantite }}" id="quantite" name="quantite">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Prix: 
-                                                                        <input type="number" step="0.01" class="form-control" value="{{ article.prix_achat }}" id="prix" name="prix">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Quantité Minimale: 
-                                                                        <input type="number" class="form-control" value="{{ article.quantite_min }}" id="quantite_min" name="quantite_min">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Date de Création : 
-                                                                        <input type="text" class="form-control" value="{{ article.date }}" id="date" name="date">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Image : 
-                                                                        <input type="text" class="form-control" value="{{ article.image }}" id="image" name="image">
-                                                                    </div>
-                                                                    
-                                                                                <div class="swiper-wrapper">
-                                                                                    <div class="swiper-slide">
-                                                                                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.harryplast.com%2Fwp-content%2Fuploads%2F2023%2F01%2Facheter-ruban-adhesif-harry-plast.png&f=1&nofb=1&ipt=f77a68b5f9c5ed08f67ebf38f992e080bb34d90fe130e13f34ba3fd68c2182a1&ipo=images" alt="" class="img-fluid d-block" />
-                                                                                    </div>
-                                                                                   
-                                                                                </div>
-                                                                            
-                                                                   
-        
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <!-- Place the buttons inside the same form -->
-                                                    <div class="mt-4">
-                                                        <button class="btn btn-success w-100" type="submit" name="action" value="edit">Editer</button>
-                                                    </div>
-                                                    <div class="mt-4">
-                                                        <button class="btn btn-danger w-100" type="submit" name="action" value="delete">Supprimer</button>
-                                                    </div>
-                                                </form>
-                                                
-                                                        
-                                                        <div class="flex-shrink-0"></div>
-                                                    
-                                                
-                                                <!-- Place the buttons inside the form -->
-                                               
-                                                
-                                                {% else %}
-                                                <div class="alert alert-warning mt-4" role="alert">
-                                                    Aucun article trouvé pour le code saisi.
-                                                </div>
-                                                {% endif %}
-                                                
-                                                <!-- end col -->
-                                            </div>
-                                            <!-- end row -->
-                                        </div>
-                                        <!-- end card body -->
-                                    </div>
-                                    <!-- end card -->
-                                </div>
-                                <!-- end col -->
-                            </div>
-                            <!-- end row -->
-        
-                            
-                            
-                        </div>
-                        <!-- container-fluid -->
-                    
-            <!-- End Page-content -->
-
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <script>document.write(new Date().getFullYear())</script> © INVENTO.
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
-                                Design & Develop by Hammouda Ahmed
-                            </div>
+                            <p class="mt-3 fs-15 fw-medium"><h1 style="color: aliceblue;">INVENTO</h1></p>
                         </div>
                     </div>
                 </div>
-            </footer>
-        </div>
-        <!-- end main content-->
+                <!-- end row -->
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card mt-4 card-bg-fill">
 
-    </div>
-    <!-- END layout-wrapper -->
+                            <div class="card-body p-4">
+                                <div class="text-center mt-2">
+                                    <h5 class="text-primary">Ajouter Fournisseur</h5>
+                                    
+                                </div>
+                               
+                              
+                                <div class="p-2 mt-4">
+                                    <form action="{{ url_for('ajouter_fournisseur') }}" method="POST">
 
+                                        <div class="mb-3">
+                                            <label for="nom_fournisseur" class="form-label">Nom Fournisseur</label>
+                                            <input type="text" name="nom_fournisseur" class="form-control" id="nom_fournisseur" placeholder="Enter le nom de fournisseur" required>
+                                        </div>
 
+                                        <div class="mb-3">
+                                            <label for="matricule_fiscale" class="form-label">Matricule Fiscale</label>
+                                            <input type="text" name="matricule_fiscale" class="form-control" id="matricule_fiscale" placeholder="Enter la matricule fiscale " >
+                                        </div>
 
-    <!--start back-to-top-->
-    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
-        <i class="ri-arrow-up-line"></i>
-    </button>
-    <!--end back-to-top-->
+                                        <div class="mb-3">
+                                            <label for="adresse" class="form-label">Adresse</label>
+                                            <input type="text" name="adresse" class="form-control" id="adresse" placeholder="Enter l'adresse" required>
+                                        </div>
+                                                                              
+                                        <div class="mb-3">
+                                            <label for="telephone" class="form-label">Téléphone </label>
+                                            <input type="text" name="telephone" class="form-control" id="telephone" placeholder="Enter telephone " >
+                                        </div>
 
-    <!--preloader-->
-    <div id="preloader">
-        <div id="status">
-            <div class="spinner-border text-primary avatar-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
+                                        
+
+                                        <div class="mt-4">
+                                            <button class="btn btn-success w-100" type="submit">Ajouter</button>
+                                        </div>
+
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        
+                    </div>
+                </div>
+                <!-- end row -->
             </div>
+            <!-- end container -->
         </div>
+        <!-- end auth page content -->
+
+        <!-- footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">&copy;
+                                <script>document.write(new Date().getFullYear())</script> INVENTO. Crafted with <i class="mdi mdi-heart text-danger"></i> by HAMMOUDA Ahmed Mustapha
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
     </div>
+    <!-- end auth-page-wrapper -->
 
-    
-
-    
-    <!-- JAVASCRIPT -->
-    <!-- JAVASCRIPT -->
-    
     <script src="{{ url_for('static', filename='assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/libs/node-waves/waves.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/libs/feather-icons/feather.min.js') }}"></script>
@@ -464,8 +644,7 @@
     <script src="{{ url_for('static', filename='js/pages/dashboard-ecommerce.init.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pages/apexcharts-line.init.js') }}"></script>
-
 </body>
 
-<!-- Mirrored from themesbrand.com/velzon/html/master/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 12 Aug 2024 07:45:33 GMT -->
+
 </html>

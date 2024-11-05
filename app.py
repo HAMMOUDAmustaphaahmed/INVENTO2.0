@@ -13,19 +13,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'invento_clé_secrète'
 
 # Initialize SQLAlchemy with the app
-
-
 db = SQLAlchemy(app)
-
-
-   
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('signin.html')
-
-
 
 # Route for login
 @app.route('/login', methods=["GET", "POST"])
@@ -54,40 +46,51 @@ def login():
     
     return render_template("signin.html")
 
-
 @app.route('/logout')
 def logout():
         session.clear()  # Efface la session pour déconnecter l'utilisateur
         return redirect(url_for('login'))
 
- 
 # Route pour la page d'administration
 @app.route('/admin')
 def admin():
     articles_data = Article.query.all()
+    articles_count=0
     quantite_totale=0
     notification_count_quantite=0
     for article in articles_data:
+        articles_count+=1
         quantite_totale += article.quantite  # Ajoute la quantité de chaque article
         if article.quantite <= article.quantite_min:
              notification_count_quantite +=1
     
     achats_data = Achat.query.all()
+    achats_count=0
     achat_quantite_totale=0
     achat_prix_totale=0
     for achat in achats_data:
+        achats_count+=1
         achat_quantite_totale += achat.quantite  # Ajoute la quantité de chaque article
         achat_prix_totale += achat.prix_achat
 
     ventes_data = Vente.query.all()
+    ventes_count=0
     vente_quantite_totale=0
     vente_prix_totale=0
     for vente in ventes_data:
+        ventes_count+=1
         vente_quantite_totale += vente.quantite  # Ajoute la quantité de chaque article
         vente_prix_totale += vente.prix_vente * vente.quantite 
     
+    fournisseurs_count = Fournisseur.query.count()
+    usines_count=Usine.query.count()
+    demandes_ventes=DemandeVente.query.count()
+    demandes_achats=DemandeAchat.query.count()
+    users_count=User.query.count()
 
-    return render_template('index.html',notification_count_quantite=int(notification_count_quantite),
+    return render_template('index.html',users_count=users_count,articles_count=articles_count,achats_count=achats_count,ventes_count=ventes_count
+                           ,usines_count=usines_count,fournisseurs_count=fournisseurs_count
+                           ,notification_count_quantite=int(notification_count_quantite),
                            quantite_totale=quantite_totale,
                            articles=articles_data,
                            achats=achats_data,
@@ -97,10 +100,6 @@ def admin():
                            quantite_vente_totale=vente_quantite_totale,
                            prix_vente_totale=vente_prix_totale)
        
-
-
-
-
 @app.route('/ajouter_article',methods=["GET", "POST"])
 def ajouter_article():
        
@@ -148,9 +147,6 @@ def rechercher_article():
                 # Return a JavaScript alert with the message and then redirect
                 return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
                 
-        
-    
-
 @app.route('/editer_article', methods=['POST','GET'])
 def editer_article():
     
@@ -211,9 +207,6 @@ def editer_article():
 
         return render_template('editer_article.html')  # Rediriger si aucune action trouvée
     
-
-
-
 @app.route('/supprimer_article')
 def supprimer_article():
     code_article = request.form.get('code_article')  # Get the article code from the form
