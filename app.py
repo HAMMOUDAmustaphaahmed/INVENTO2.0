@@ -979,6 +979,7 @@ class DemandeAchat(db.Model):
     etat = db.Column(db.Integer, nullable=False)
     reception = db.Column(db.Integer, nullable=False)
     commentaire = db.Column(db.String(255), nullable=True)
+    fournisseur = db.Column(db.String(255), nullable=True)
 
 # History Model
 class History(db.Model):
