@@ -82,15 +82,32 @@ def admin():
         vente_quantite_totale += vente.quantite  # Ajoute la quantité de chaque article
         vente_prix_totale += vente.prix_vente * vente.quantite 
     
+    fournisseurs_data=Fournisseur.query.all()
     fournisseurs_count = Fournisseur.query.count()
+    usines_data=Usine.query.all()
     usines_count=Usine.query.count()
-    demandes_ventes=DemandeVente.query.count()
-    demandes_achats=DemandeAchat.query.count()
+    demandes_ventes_data=DemandeVente.query.all()
+    demandes_achats_data=DemandeAchat.query.all()
+    demandes_ventes_count=DemandeVente.query.count()
+    demandes_achats_count=DemandeAchat.query.count()
+    users_data=User.query.all()
     users_count=User.query.count()
+    confirmation_sortie_data=DemandeVente.query.filter_by(etat=0,reception=1).all()
+    confirmation_sortie_count=DemandeVente.query.filter_by(etat=0,reception=1).count()
+    confirmation_arriver_data=DemandeVente.query.filter_by(etat=0,reception=1).all()
+    confirmation_arriver_count=DemandeVente.query.filter_by(etat=0,reception=1).count()
 
-    return render_template('index.html',users_count=users_count,articles_count=articles_count,achats_count=achats_count,ventes_count=ventes_count
-                           ,usines_count=usines_count,fournisseurs_count=fournisseurs_count
-                           ,notification_count_quantite=int(notification_count_quantite),
+    return render_template('index.html',users_count=users_count,
+                           users_data=users_data,
+                           articles_count=articles_count,
+                           achats_count=achats_count,ventes_count=ventes_count,
+                           usines_count=usines_count,
+                           fournisseurs_count=fournisseurs_count,
+                           demandes_achats_data=demandes_achats_data,
+                           demandes_ventes_data=demandes_ventes_data,
+                           demandes_achats_count=demandes_achats_count,
+                           demandes_ventes_count=demandes_ventes_count,
+                           notification_count_quantite=int(notification_count_quantite),
                            quantite_totale=quantite_totale,
                            articles=articles_data,
                            achats=achats_data,
@@ -98,7 +115,11 @@ def admin():
                            achat_prix_totale=achat_prix_totale,
                            ventes=ventes_data,
                            quantite_vente_totale=vente_quantite_totale,
-                           prix_vente_totale=vente_prix_totale)
+                           prix_vente_totale=vente_prix_totale,
+                           confirmation_arriver_data=confirmation_arriver_data,
+                           confirmation_arriver_count=confirmation_arriver_count,
+                           confirmation_sortie_data=confirmation_sortie_data,
+                           confirmation_sortie_count=confirmation_sortie_count)
        
 @app.route('/ajouter_article',methods=["GET", "POST"])
 def ajouter_article():
