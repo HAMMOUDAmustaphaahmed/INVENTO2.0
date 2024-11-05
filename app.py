@@ -644,7 +644,8 @@ def confirmer_demande_achat():
         elif action == 'delete':
             if demande_achat:
                 # Supprimer l'article de la base de données
-                db.session.delete(demande_achat)
+                demande_achat.etat=2
+                demande_achat.reception=2
                 db.session.commit()
                 message = "Demande d'achat supprimé avec succès."
                 # Return a JavaScript alert with the message and then redirect
