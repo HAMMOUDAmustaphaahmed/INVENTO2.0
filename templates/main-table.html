@@ -11,7 +11,7 @@
                                 <a href="/ajouter_usine" class="btn btn-soft-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter Usine</a>
                                 <a href="/ajouter_fournisseur" class="btn btn-soft-info" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter Fournisseur</a>
                                 <a href="/ajouter_user" class="btn btn-soft-secondary" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter User</a>
-                                <a href="" class="btn btn-soft-danger" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter Demande Achat</a>
+                                <a href="/ajouter_demande_achat" class="btn btn-soft-danger" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter Demande Achat</a>
                                 <a href="" class="btn btn-soft-info" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Ajouter Demande Vente</a>
 
                             </div>
@@ -258,9 +258,11 @@
                                             <th scope="col">Libelle Article</th>
                                             <th scope="col">Quantite</th>
                                             <th scope="col">Assignation</th>
-                                            <th scope="col">Commande</th>
-                                            <th scope="col">Date</th>
+                                           
                                             <th scope="col">Etat</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Action</th>
+                                            
                                             
                                             
                                         </tr>
@@ -274,8 +276,9 @@
                                             <td>{{ demande_achat.quantite }}</td>
                                            
                                             <td><a class="fw-semibold">{{ demande_achat.assignation }}</a></td>
-                                            <td>{{ demande_achat.date }}</td>
+                                            
                                             <td>{{ demande_achat.etat }}</td>
+                                            <td>{{ demande_achat.date }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -313,8 +316,9 @@
                                             <th scope="col">Vers</th>
                                             <th scope="col">Commande</th>
                                             <th scope="col">Prix</th>
-                                            <th scope="col">Date</th>
                                             <th scope="col">Etat</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Action</th>
                                             
                                             
                                         </tr>
@@ -329,8 +333,9 @@
                                             <td>{{ demande_vente.vers }}</td>
                                             <td><a class="fw-semibold">{{ demande_vente.Commande }}</a></td>
                                             <td>{{ demande_vente.Prix }}</td>
-                                            <td>{{ demande_vente.date }}</td>
                                             <td>{{ demande_vente.etat }}</td>
+                                            <td>{{ demande_vente.date }}</td>
+                                            
                                         </tr>
                                         {% endfor %}
                                     </tbody>

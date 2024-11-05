@@ -114,12 +114,15 @@ def admin():
                            achat_quantite_totale=achat_quantite_totale,
                            achat_prix_totale=achat_prix_totale,
                            ventes=ventes_data,
+                           vente_prix_totale=vente_prix_totale,
                            quantite_vente_totale=vente_quantite_totale,
                            prix_vente_totale=vente_prix_totale,
                            confirmation_arriver_data=confirmation_arriver_data,
                            confirmation_arriver_count=confirmation_arriver_count,
                            confirmation_sortie_data=confirmation_sortie_data,
-                           confirmation_sortie_count=confirmation_sortie_count)
+                           confirmation_sortie_count=confirmation_sortie_count,
+                           fournisseurs_data=fournisseurs_data,
+                           usines_data=usines_data)
        
 @app.route('/ajouter_article',methods=["GET", "POST"])
 def ajouter_article():
@@ -556,35 +559,33 @@ def supprimer_fournisseur():
         
             return render_template('editer_fournisseur.html')
         
-        
+
+
 @app.route('/ajouter_demande_achat',methods=["GET", "POST"])
 def ajouter_demande_achat():
        
             if request.method == 'POST':
                 # Retrieve form data
-                article_data = {
+                demande_achat_data = {
                 'code_article': request.form.get('code_article'),
                 'libelle_article': request.form.get('libelle_article'),
-                'prix_achat': request.form.get('prix_achat'),
                 'assignation': request.form.get('assignation'),
                 'quantite': request.form.get('quantite'),
-                'fournisseur': request.form.get('fournisseur'),
-                'quantite_min': request.form.get('quantite_min'),
-                'image': request.form.get('image')
             }
 
                 # Call the function to add user
-                if fun_ajouter_article(article_data):
-                    message = "Article ajouté avec succès."
+                if fun_ajouter_demande_achat(demande_achat_data):
+                    message = "Demande d'achat ajouté avec succès."
                     # Return a JavaScript alert with the message and then redirect
-                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('admin')}";</script>"""
                 else:
-                    message = "Erreur lors de l'ajout de l'article."
+                    message = "La quantité de la demande dépasse la quantité dans le stock"
                     # Return a JavaScript alert with the message and then redirect
-                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_article')}";</script>"""
-            return render_template('ajouter_article.html')
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_demande_achat')}";</script>"""
+            return render_template('ajouter_demande_achat.html')
      
-    
+
+
     
 
 
@@ -592,81 +593,72 @@ def ajouter_demande_achat():
 
 @app.route('/rechercher_demande_achat', methods=['GET', 'POST'])
 def rechercher_demande_achat():
-    
+        demandes_achats=DemandeAchat.query.all()
         if request.method == 'POST':
-            code_article = request.form.get("code_article")
-            article = fun_info_article(code_article)
-            if article:
-                return render_template('editer_article.html', article=article)
+            code_demande = request.form.get("code_demande")
+            demande_achat = fun_info_demande_achat(code_demande)
+            if demande_achat:
+                return render_template('confirmer_demande_achat.html', demande_achat=demande_achat,demandes_achats=demandes_achats)
             else:
-                message = "Article not found."
+                message = "Demande achat not found."
 
                 # Return a JavaScript alert with the message and then redirect
-                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
                 
-        
-@app.route('/editer_demande_achat', methods=['POST','GET'])
-def editer_demande_achat():
-    
-        code_article = request.form.get('code_article')
+@app.route('/confirmer_demande_achat', methods=['POST','GET'])
+def confirmer_demande_achat():
+        demandes_achats=DemandeAchat.query.all()
+        code_demande = request.form.get('code_demande')
         action = request.form.get('action')  # Récupérer l'action (edit ou delete)
-        article = fun_info_article(code_article)
+        demande_achat = fun_info_demande_achat(code_demande)
        
-        if action == 'edit':
-            if article:
+        if action == 'confirmer':
+            if demande_achat:
                 # Mettre à jour les informations de l'article
-                article.code_article = request.form.get('code_article')
-                article.libelle_article = request.form.get('libelle_article')
-                article.prix_achat = request.form.get('prix')
-                article.assignation = request.form.get('assignation')
-                article.quantite = request.form.get('quantite')
-                article.fournisseur = request.form.get('fournisseur')
-                article.quantite_min = request.form.get('quantite_min')
-                article.image = request.form.get('image')
-                print(article.image)
-                print(len(article.image))
-               
-
-                
-
+                demande_achat.code_article = request.form.get('code_article')
+                demande_achat.libelle_article = request.form.get('libelle_article')
+                demande_achat.prix_achat = request.form.get('prix')
+                demande_achat.assignation = request.form.get('assignation')
+                demande_achat.quantite = request.form.get('quantite')
+                demande_achat.fournisseur=request.form.get('fournisseur')
+                demande_achat.prix_achat=request.form.get('prix_achat')
+                demande_achat.etat=0
                 # Valider les données et committer les mises à jour
                 try:
                     
                     db.session.commit()
-                    message = "Article modifié avec succès."
+                    message = "Demande d'achat modifié avec succès."
                     # Return a JavaScript alert with the message and then redirect
-                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
                     
                 except :
                     db.session.rollback()
-                    message = "Erreur lors de la mise à jour de l'article. 1 "
+                    message = "Erreur lors de la mise à jour de la demande d'achat. 1 "
                     # Return a JavaScript alert with the message and then redirect
-                    return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                    return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
             else:
-                message = "Article not found."
+                message = "Demande d'achat not found."
                 # Return a JavaScript alert with the message and then redirect
-                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
 
         elif action == 'delete':
-            if article:
+            if demande_achat:
                 # Supprimer l'article de la base de données
-                db.session.delete(article)
+                db.session.delete(demande_achat)
                 db.session.commit()
-                message = "Article supprimé avec succès."
+                message = "Demande d'achat supprimé avec succès."
                 # Return a JavaScript alert with the message and then redirect
-                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
 
                 
                
             else:
-                message = "Article not found."
+                message = "Demande not found."
                 # Return a JavaScript alert with the message and then redirect
-                return f"""<script>alert("{message}");window.location.href = "{url_for('editer_article')}";</script>"""
+                return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
 
-        return render_template('editer_article.html')  # Rediriger si aucune action trouvée
+        return render_template('confirmer_demande_achat.html',demandes_achats=demandes_achats)  # Rediriger si aucune action trouvée
     
-
-
 
 
 
@@ -693,6 +685,35 @@ def fun_ajouter_user(data):
         print(f"Erreur lors de l'ajout de l'utilisateur : {e}")
         db.session.rollback()  # Roll back changes on error
         return False
+
+def fun_ajouter_demande_achat(data):
+    try:        
+        # Create a new Article
+        new_demande_achat = DemandeAchat(
+            code_article=data['code_article'],
+            libelle_article=data['libelle_article'],
+            assignation=data['assignation'],
+            quantite=data['quantite'],
+            etat=1,
+            date=datetime.now(timezone.utc),
+            reception=1,
+            
+        )
+        article=Article.query.filter_by(code_article=new_demande_achat.code_article).first()
+        if article.quantite >= new_demande_achat.quantite:
+            # Add and commit to the database
+            db.session.add(new_demande_achat)
+            db.session.commit()
+            fun_history_ajouter_demande_achat(data)
+            return True
+        else: 
+             print(f"La quantité de la demande dépasse la quantité dans le stock")
+             return False
+    except Exception as e:
+        print(f"Erreur lors de l'ajout de la demande d'achat: {e}")
+        db.session.rollback()  # Roll back changes on error
+        return False
+    
 
 def fun_ajouter_article(data):
 
@@ -805,6 +826,21 @@ def fun_history_ajouter_article(data):
     db.session.commit()
     return True
 
+def fun_history_ajouter_demande_achat(data):
+    new_history=History(
+        code_article=data['code_article'],
+        libelle_article=data['libelle_article'],
+        emplacement=data['assignation'],
+        
+        action="ajout d'un nouveau demande d'achat",
+       
+        details=str('date : ' + str(datetime.now(timezone.utc)))
+        )
+    db.session.add(new_history)
+    db.session.commit()
+    return True     
+
+
 def fun_history_ajouter_usine(data):
     
     new_history=History(
@@ -828,7 +864,9 @@ def fun_history_editer_article(data):
     db.session.commit()
     return True
     
-
+def fun_info_demande_achat(code_demande):
+    demande_achat_data = DemandeAchat.query.filter_by(code_demande=code_demande).first()
+    return demande_achat_data
 
 def fun_info_article(code_article):
     article_data = Article.query.filter_by(code_article=code_article).first()
