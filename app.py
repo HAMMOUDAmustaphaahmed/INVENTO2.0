@@ -596,7 +596,7 @@ def rechercher_demande_achat():
         demandes_achats=DemandeAchat.query.all()
         if request.method == 'POST':
             code_demande = request.form.get("code_demande")
-            demande_achat = fun_info_demande_achat(code_demande)
+            demande_achat = fun_info_demande_achat(code_demande,etat=1, reception=1)
             if demande_achat:
                 return render_template('confirmer_demande_achat.html', demande_achat=demande_achat,demandes_achats=demandes_achats)
             else:
@@ -850,7 +850,7 @@ def rechercher_demande_vente():
         demandes_ventes=DemandeVente.query.all()
         if request.method == 'POST':
             code_demande = request.form.get("code_demande")
-            demande_vente = DemandeVente.query.filter_by(code_demande=code_demande).first()
+            demande_vente = DemandeVente.query.filter_by(code_demande=code_demande, etat=1, reception=1).first()
             if demande_vente:
                 return render_template('confirmer_demande_vente.html', demande_vente=demande_vente,demandes_ventes=demandes_ventes)
             else:
@@ -921,12 +921,13 @@ def confirmer_expedition_vente():
                     code_article=demande_vente.code_article,
                     libelle_article=demande_vente.libelle_article,
                     quantite=demande_vente.quantite,
-                    prix_achat=demande_vente.prix_vente,
-                    assignation=demande_vente.vers,
-                    fournisseur=demande_vente.commande
+                    prix_vente=demande_vente.prix_vente,
+                    vers=demande_vente.vers,
+                   
+                    
                 )
-                print(demande_vente)
-                update_article_quantity_and_pmp(demande_vente.code_article,demande_vente.quantite,demande_vente.prix_achat)
+                print(nouvel_vente)
+               
                 
                 # Valider les données et committer les mises à jour
                 try:
@@ -938,20 +939,78 @@ def confirmer_expedition_vente():
                 return redirect(url_for('confirmer_reception_achat'))  # Rediriger vers la même page pour éviter le rechargement de la page
 
     # Afficher la page avec la liste des demandes d'achats
-    return render_template('confirmer_reception_achat.html', demandes_achats=demandes_ventes)
+    return render_template('confirmer_expedition_vente.html', demandes_ventes=demandes_ventes)
 
-def ajouter_vente(code_demande, code_article, libelle_article, quantite, prix_achat, vers, commande):
+def update_achat_vente_article(demande_vente):
+    
+    
+    total_quantite_a_vendre = demande_vente.quantite
+    code_article = demande_vente.code_article
+    print(f"Début de l'expédition de la vente pour {code_article} avec une quantité demandée de {total_quantite_a_vendre}")
+
+    # 2. Récupérer les achats non vendus pour le code_article en utilisant LIFO (dernier achat d'abord)
+    achats = Achat.query.filter_by(code_article=code_article, vendue=0).order_by(Achat.date.desc()).all()
+
+    # 3. Processus LIFO pour gérer la vente
+    for achat in achats:
+        if total_quantite_a_vendre == 0:
+            break
+        
+        # Si la quantité restante de cet achat est supérieure à la quantité de vente restante
+        if achat.quantite_restante is not None and achat.quantite_restante > 0:
+            if achat.quantite_restante >= total_quantite_a_vendre:
+                # On a assez de quantité restante dans cet achat pour cette vente
+                achat.quantite_restante -= total_quantite_a_vendre
+                achat.vendue = 1  # Marquer comme vendu
+                total_quantite_a_vendre = 0  # Vente terminée
+                print(f"Vente réalisée avec l'achat du lot {achat.lot}, quantités restantes mises à jour.")
+            else:
+                # Pas assez de quantité restante, vendre tout ce qu'on peut de cet achat et passer au suivant
+                total_quantite_a_vendre -= achat.quantite_restante
+                achat.quantite_restante = 0
+                achat.vendue = 1
+                print(f"Vente partielle réalisée avec l'achat du lot {achat.lot}, quantité restante épuisée.")
+        else:
+            # Si l'achat n'a plus de quantité restante, on passe au suivant
+            continue
+        
+        db.session.commit()
+
+    # 4. Mettre à jour la table article
+    article = Article.query.filter_by(code_article=code_article).first()
+    if article:
+        article.quantite -= demande_vente.quantite
+        db.session.commit()
+        print(f"Quantité de l'article {code_article} mise à jour dans la table article.")
+
+    # 5. Mettre à jour la table achats pour les achats utilisés (vendus)
+    for achat in achats:
+        if achat.vendue == 1:
+            achat.vendue = 1
+            db.session.commit()
+
+    # 6. Vérification et mise à jour des achats avec `quantite_restante`
+    for achat in achats:
+        if achat.quantite_restante is not None and achat.quantite_restante > 0:
+            achat.quantite_restante = achat.quantite_restante
+            db.session.commit()
+    
+    print(f"Vente confirmée pour {total_quantite_a_vendre} articles du code {code_article}.")
+    return total_quantite_a_vendre
+
+
+def ajouter_vente(code_demande, code_article, libelle_article, quantite, prix_vente, vers):
     """Ajoute un nouvel achat dans la base de données avec un numéro de lot généré automatiquement."""
-    lot = generer_lot_vente()  # Génère le lot
+   
     new_vente = Vente(
-        lot=lot,
+       
         code_demande=code_demande,
         code_article=code_article,
         libelle_article=libelle_article,
         quantite=quantite,
-        prix_achat=prix_achat,
-        assignation=vers,
-        fournisseur=commande
+        prix_vente=prix_vente,
+        vers=vers,
+        
     )
     print(new_vente)
     
@@ -1258,14 +1317,15 @@ class Achat(db.Model):
     assignation = db.Column(db.String(255), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     fournisseur = db.Column(db.String(255), nullable=False)
-    vendue = db.Column(db.Integer, nullable=False, default=0) 
+    vendue = db.Column(db.Integer, nullable=False, default=0)
+    quantite_restante = db.Column(db.Integer, nullable=True, default=0) 
     
 # Sales Model (Ventes)
 class Vente(db.Model):
     __tablename__ = 'ventes'
     id_vente = db.Column(db.Integer, primary_key=True, autoincrement=True)
     code_demande = db.Column(db.Integer, nullable=True)
-    code_article = db.Column(db.Integer, nullable=True)
+    code_article = db.Column(db.String(255), nullable=True)
     libelle_article = db.Column(db.String(20), nullable=True)
     quantite = db.Column(db.Integer, nullable=True)
     prix_vente = db.Column(Numeric(6, 3), nullable=True)
