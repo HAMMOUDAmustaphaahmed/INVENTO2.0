@@ -208,7 +208,7 @@
                                         <a href="/confirmer_demande_achat" class="nav-link" data-key="Ajouter-User">Confirmer Demande d'achat </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/confirmer_reception_achat" class="nav-link" data-key="Ajouter-User"> Confirmer Reception d'achat </a>
+                                        <a href="/confirmer_reception_achat" class="nav-link" data-key="Ajouter-User">Confirmer Reception d'achat </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="" class="nav-link" data-key="Editer-User"> Demande vente </a>
@@ -275,131 +275,83 @@
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content">
-
-            <div id="layout-wrapper">
-
- 
-                <!-- Left Sidebar End -->
-                <!-- Vertical Overlay-->
-                <div class="vertical-overlay"></div>
-        
-                <!-- ============================================================== -->
-                <!-- Start right Content here -->
-                <!-- ============================================================== -->
+       
+            
+                
                 <div class="main-content">
-        
                     <div class="page-content">
                         <div class="container-fluid">
-                            
-                            <!-- start page title -->
                             <div class="row">
                                 <div class="col-12">
                                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                        <h4 class="mb-sm-0">Editer User</h4>
-        
+                                        <h4 class="mb-sm-0">Confirmer Demande Achat</h4>
                                         <div class="page-title-right">
                                             <ol class="breadcrumb m-0">
                                                 <li class="breadcrumb-item"><a href="/">Invento</a></li>
-                                                <li class="breadcrumb-item active">User Details</li>
+                                                <li class="breadcrumb-item active">Demande Achat Details</li>
                                             </ol>
                                         </div>
-        
                                     </div>
                                 </div>
                             </div>
-                            <!-- end page title -->
         
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <div class="row gx-lg-5">
-                                                
-                                                <!-- end col -->
-        
-                                  
-                                                <form action="{{ url_for('rechercher_user') }}" method="POST" class="app-search d-none d-md-block">
-                                                    <div class="position-relative">
-                                                        <input type="text" class="form-control" placeholder="Entrer le nom de l'utulisateur..." id="username" name="username" required>
-                                                        <span class="mdi mdi-magnify search-widget-icon"></span>
-                                                        <button type="submit" class="btn btn-primary">Rechercher</button>
-                                                    </div>
-                                                </form>
-                                                
-                                                {% if user %}
-                                                <form action="{{ url_for('editer_user') }}" method="POST">
-                                                    <input type="hidden" name="id" value="{{ user.id }}">
-                                                
-                                                    <div class="col-xl-8 mt-4">
-                                                        <div class="d-flex">
-                                                            <div class="flex-grow-1">
-                                                                <h4>{{ user.username }}</h4>
-                                                                <div class="hstack gap-3 flex-wrap">
-                                                                    <div>Nom :
-                                                                        <input type="text" class="form-control" value="{{ user.username }}" id="username" name="username">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Password:
-                                                                        <input type="text" class="form-control" value="{{ user.password }}" id="password" name="password" required>
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Emplacement :
-                                                                        <input type="text" class="form-control" value="{{ user.emplacement }}" id="emplacement" name="emplacement">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Téléphone :
-                                                                        <input type="text" class="form-control" value="{{ user.numero_telephone }}" id="numero_telephone" name="numero_telephone">
-                                                                    </div>
-                                                                    <div class="vr"></div>
-                                                                    <div>Role :
-                                                                        <input type="text" class="form-control" value="{{ user.role }}" id="role" name="role">
-                                                                    </div>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                
-                                                    <!-- Place the buttons inside the same form -->
-                                                    <div class="mt-4">
-                                                        <button class="btn btn-success w-100" type="submit" name="action" value="edit">Editer</button>
-                                                    </div>
-                                                    <div class="mt-4">
-                                                        <button class="btn btn-danger w-100" type="submit" name="action" value="delete">Supprimer</button>
-                                                    </div>
-                                                </form>
-                                                
-                                                
-                                                
-                                                        
-                                                        <div class="flex-shrink-0"></div>
-                                                    
-                                                
-                                                <!-- Place the buttons inside the form -->
-                                               
-                                                
-                                                {% else %}
-                                                <div class="alert alert-warning mt-4" role="alert">
-                                                    Aucun usine trouvé .
-                                                </div>
-                                                {% endif %}
-                                                
-                                                <!-- end col -->
-                                            </div>
-                                            <!-- end row -->
+                                            <div class="row gx-lg-5"></div>
                                         </div>
-                                        <!-- end card body -->
                                     </div>
-                                    <!-- end card -->
                                 </div>
-                                <!-- end col -->
                             </div>
-                            <!-- end row -->
         
-                            
+                            <<div class="table-responsive">
+                                <form action="{{ url_for('confirmer_reception_achat') }}" method="POST">
+                                    <table class="table align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">Code Demande</th>
+                                                <th scope="col">Code Article</th>
+                                                <th scope="col">Libelle Article</th>
+                                                <th scope="col">Quantite</th>
+                                                <th scope="col">Assignation</th>
+                                                <th scope="col">Prix Achat</th>
+                                                <th scope="col">Fournisseur</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for demande_achat in demandes_achats %}
+                                            <tr>
+                                                <td><a class="fw-semibold">{{ demande_achat.code_demande }}</a></td>
+                                                <td><a class="fw-semibold">{{ demande_achat.code_article }}</a></td>
+                                                <td>{{ demande_achat.libelle_article }}</td>
+                                                <td>{{ demande_achat.quantite }}</td>
+                                                <td><a class="fw-semibold">{{ demande_achat.assignation }}</a></td>
+                                                <td>{{ demande_achat.prix_achat }}</td>
+                                                <td>{{ demande_achat.fournisseur }}</td>
+                                                <td>{{ demande_achat.date }}</td>
+                                                <td>
+                                                    <!-- Formulaire pour chaque ligne -->
+                                                    <form action="{{ url_for('confirmer_reception_achat') }}" method="POST">
+                                                        <input type="hidden" name="code_demande" value="{{ demande_achat.code_demande }}">
+                                                        <button class="btn btn-success w-100" type="submit" name="action" value="confirmer">Confirmer</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
                             
                         </div>
+                    </div>
+                </div>
+           
+        
+        
                         <!-- container-fluid -->
                     
             <!-- End Page-content -->

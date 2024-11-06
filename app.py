@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timezone
-from sqlalchemy import Numeric
+from sqlalchemy import Numeric,desc
 from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
@@ -86,10 +86,10 @@ def admin():
     fournisseurs_count = Fournisseur.query.count()
     usines_data=Usine.query.all()
     usines_count=Usine.query.count()
-    demandes_ventes_data=DemandeVente.query.all()
-    demandes_achats_data=DemandeAchat.query.all()
-    demandes_ventes_count=DemandeVente.query.count()
-    demandes_achats_count=DemandeAchat.query.count()
+    demandes_ventes_data=DemandeVente.query.filter_by(etat=1,reception=1).all()
+    demandes_achats_data=DemandeAchat.query.filter_by(etat=1,reception=1).all()
+    demandes_ventes_count=DemandeVente.query.filter_by(etat=1,reception=1).count()
+    demandes_achats_count=DemandeAchat.query.filter_by(etat=1,reception=1).count()
     users_data=User.query.all()
     users_count=User.query.count()
     confirmation_sortie_data=DemandeVente.query.filter_by(etat=0,reception=1).all()
@@ -579,7 +579,7 @@ def ajouter_demande_achat():
                     # Return a JavaScript alert with the message and then redirect
                     return f"""<script>alert("{message}");window.location.href = "{url_for('admin')}";</script>"""
                 else:
-                    message = "La quantité de la demande dépasse la quantité dans le stock"
+                    message = "La quantité de la demande dépasse la quantité dans le stock ou il ya un erreur lors de l'insertion de la demande dans la table"
                     # Return a JavaScript alert with the message and then redirect
                     return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_demande_achat')}";</script>"""
             return render_template('ajouter_demande_achat.html')
@@ -607,7 +607,7 @@ def rechercher_demande_achat():
                 
 @app.route('/confirmer_demande_achat', methods=['POST','GET'])
 def confirmer_demande_achat():
-        demandes_achats=DemandeAchat.query.all()
+        demandes_achats=DemandeAchat.query.filter_by(etat=1,reception=1).all()
         code_demande = request.form.get('code_demande')
         action = request.form.get('action')  # Récupérer l'action (edit ou delete)
         demande_achat = fun_info_demande_achat(code_demande)
@@ -627,6 +627,7 @@ def confirmer_demande_achat():
                 try:
                     
                     db.session.commit()
+                    
                     message = "Demande d'achat modifié avec succès."
                     # Return a JavaScript alert with the message and then redirect
                     return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_achat')}";</script>"""
@@ -661,7 +662,134 @@ def confirmer_demande_achat():
         return render_template('confirmer_demande_achat.html',demandes_achats=demandes_achats)  # Rediriger si aucune action trouvée
     
 
+# Fonction pour récupérer le numéro de semaine de la date
+def numero_semaine(date):
+    """Retourne le numéro de la semaine de l'année pour une date donnée."""
+    return date.isocalendar()[1]  # Retourne le numéro de semaine pour la date
 
+def generer_lot_achat():
+    """Génère un numéro de lot unique en fonction de l'année, du numéro de semaine et d'une séquence."""
+    current_date = datetime.now(timezone.utc)
+    year = current_date.strftime("%Y")
+    week_number = numero_semaine(current_date)
+    
+    # Obtenir le dernier enregistrement d'achat de la même semaine et de la même année
+    dernier_achat = Achat.query.filter(Achat.lot.like(f"{year}S{str(week_number).zfill(2)}%")).order_by(Achat.lot.desc()).first()
+
+    if dernier_achat:
+        # Extraire la dernière séquence de lot
+        dernier_lot = dernier_achat.lot
+        dernier_sequence = int(dernier_lot[7:])
+        nouvelle_sequence = dernier_sequence + 1
+    else:
+        # Si aucun achat n'existe pour cette semaine, démarrer à 1
+        nouvelle_sequence = 1
+    
+    # Générer le numéro de lot
+    lot_number = f"{year}S{str(week_number).zfill(2)}{str(nouvelle_sequence).zfill(6)}"
+    return lot_number
+
+
+# Fonction pour ajouter un achat
+def ajouter_achat(code_demande, code_article, libelle_article, quantite, prix_achat, assignation, fournisseur):
+    """Ajoute un nouvel achat dans la base de données avec un numéro de lot généré automatiquement."""
+    lot = generer_lot_achat()  # Génère le lot
+    new_achat = Achat(
+        lot=lot,
+        code_demande=code_demande,
+        code_article=code_article,
+        libelle_article=libelle_article,
+        quantite=quantite,
+        prix_achat=prix_achat,
+        assignation=assignation,
+        fournisseur=fournisseur
+    )
+    print(new_achat)
+    
+    # Ajouter et committer la transaction dans la base de données
+    db.session.add(new_achat)
+    db.session.commit()
+    return new_achat
+
+from decimal import Decimal
+
+def update_article_quantity_and_pmp(code_article, quantite_ajoutee, prix_nouvel_achat):
+    # Convertir les valeurs en Decimal si elles ne le sont pas déjà
+    quantite_ajoutee = Decimal(quantite_ajoutee)
+    prix_nouvel_achat = Decimal(prix_nouvel_achat)
+    
+    # Récupérer l'article correspondant au code_article
+    article = Article.query.filter_by(code_article=code_article).first()
+    
+    # Vérifier si l'article existe
+    if not article:
+        print("Article non trouvé.")
+        return False  # ou gérer cette situation autrement
+
+    try:
+        # Assurez-vous que les valeurs actuelles de l'article sont également des Decimals
+        quantite_actuelle = Decimal(article.quantite)
+        prix_actuel = Decimal(article.prix_achat)
+        
+        # Calculer la nouvelle quantité totale et le PMP
+        quantite_totale = quantite_actuelle + quantite_ajoutee
+        pmp = ((quantite_actuelle * prix_actuel) + (quantite_ajoutee * prix_nouvel_achat)) / quantite_totale
+        
+        # Mettre à jour la quantité et le prix d'achat (PMP)
+        article.quantite = quantite_totale
+        article.prix_achat = pmp
+        
+        # Sauvegarder les changements dans la base de données
+        db.session.commit()
+        return True
+    
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour de l'article: {e}")
+        db.session.rollback()  # Rollback si une erreur survient
+        return False
+
+
+
+@app.route('/confirmer_reception_achat', methods=['POST', 'GET'])
+def confirmer_reception_achat():
+    demandes_achats = DemandeAchat.query.filter_by(etat=0, reception=1).all()  # Récupérer toutes les demandes d'achats pour l'affichage
+    
+    if request.method == 'POST':
+        code_demande = request.form.get('code_demande')
+        action = request.form.get('action')  # Récupérer l'action (ici, 'confirmer')
+        
+        # Trouver la demande d'achat correspondante
+        demande_achat = DemandeAchat.query.filter_by(code_demande=code_demande).first()
+       
+        if demande_achat and action == 'confirmer':
+            if demande_achat.reception == 1:  # Vérifier si la réception est encore en attente
+                # Mettre à jour les informations de la demande d'achat
+                demande_achat.reception = 0  # Marquer comme reçu
+                demande_achat.etat = 1  # Mettre l'état à confirmé (par exemple)
+                
+                nouvel_achat = ajouter_achat(
+                    code_demande=demande_achat.code_demande,
+                    code_article=demande_achat.code_article,
+                    libelle_article=demande_achat.libelle_article,
+                    quantite=demande_achat.quantite,
+                    prix_achat=demande_achat.prix_achat,
+                    assignation=demande_achat.assignation,
+                    fournisseur=demande_achat.fournisseur
+                )
+                print(nouvel_achat)
+                update_article_quantity_and_pmp(demande_achat.code_article,demande_achat.quantite,demande_achat.prix_achat)
+                
+                # Valider les données et committer les mises à jour
+                try:
+                    db.session.commit()
+                    flash(f"Achat ajouté avec succès avec le lot {nouvel_achat.lot}", "success")
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Erreur lors de la réception de l'achat: {e}", "error")
+                return redirect(url_for('confirmer_reception_achat'))  # Rediriger vers la même page pour éviter le rechargement de la page
+
+    # Afficher la page avec la liste des demandes d'achats
+    return render_template('confirmer_reception_achat.html', demandes_achats=demandes_achats)
 
 def fun_ajouter_user(data):
     try:
@@ -688,33 +816,33 @@ def fun_ajouter_user(data):
         return False
 
 def fun_ajouter_demande_achat(data):
+    code_article=data['code_article']
+    article=Article.query.filter_by(code_article=code_article).first()
+   
     try:        
-        # Create a new Article
-        new_demande_achat = DemandeAchat(
-            code_article=data['code_article'],
-            libelle_article=data['libelle_article'],
-            assignation=data['assignation'],
-            quantite=data['quantite'],
-            etat=1,
-            date=datetime.now(timezone.utc),
-            reception=1,
+            # Create a new Article
+            new_demande_achat = DemandeAchat(
+                code_article=data['code_article'],
+                libelle_article=data['libelle_article'],
+                assignation=data['assignation'],
+                quantite=data['quantite'],
+                etat=1,
+                date=datetime.now(timezone.utc),
+                reception=1,
+                
+            )
             
-        )
-        article=Article.query.filter_by(code_article=new_demande_achat.code_article).first()
-        if article.quantite >= new_demande_achat.quantite:
             # Add and commit to the database
             db.session.add(new_demande_achat)
             db.session.commit()
             fun_history_ajouter_demande_achat(data)
             return True
-        else: 
-             print(f"La quantité de la demande dépasse la quantité dans le stock")
-             return False
+        
     except Exception as e:
-        print(f"Erreur lors de l'ajout de la demande d'achat: {e}")
-        db.session.rollback()  # Roll back changes on error
-        return False
-    
+            print(f"Erreur lors de l'ajout de la demande d'achat: {e}")
+            db.session.rollback()  # Roll back changes on error
+            return False
+        
 
 def fun_ajouter_article(data):
 
@@ -920,9 +1048,15 @@ class Fournisseur(db.Model):
     telephone = db.Column(db.String(50), nullable=True)
 
 # Purchase Model (Achats)
+from datetime import datetime, timezone
+from sqlalchemy import func, desc
+
+
 class Achat(db.Model):
     __tablename__ = 'achats'
-    code_demande = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    
+    lot = db.Column(db.String(255), primary_key=True)
+    code_demande = db.Column(db.String(255), nullable=False)
     code_article = db.Column(db.Integer, nullable=False)
     libelle_article = db.Column(db.String(255), nullable=False)
     quantite = db.Column(db.Integer, nullable=False)
@@ -930,8 +1064,8 @@ class Achat(db.Model):
     assignation = db.Column(db.String(255), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     fournisseur = db.Column(db.String(255), nullable=False)
-    lot_achat = db.Column(db.String(255), nullable=False)
 
+    
 # Sales Model (Ventes)
 class Vente(db.Model):
     __tablename__ = 'ventes'
