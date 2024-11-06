@@ -23,16 +23,18 @@ DROP TABLE IF EXISTS `achats`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `achats` (
-  `code_demande` int NOT NULL AUTO_INCREMENT,
-  `code_article` int NOT NULL,
+  `code_demande` varchar(255) NOT NULL,
+  `code_article` varchar(255) NOT NULL,
   `libelle_article` varchar(255) NOT NULL,
   `quantite` int NOT NULL,
   `prix_achat` float NOT NULL,
   `assignation` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
   `fournisseur` varchar(255) NOT NULL,
-  `lot_achat` varchar(255) NOT NULL,
-  PRIMARY KEY (`code_demande`)
+  `lot` varchar(255) NOT NULL,
+  `vendue` int NOT NULL DEFAULT '0',
+  `quantite_restante` int DEFAULT NULL,
+  PRIMARY KEY (`lot`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -62,8 +64,9 @@ CREATE TABLE `articles` (
   `fournisseur` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
   `quantite_min` int NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_article`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +75,7 @@ CREATE TABLE `articles` (
 
 LOCK TABLES `articles` WRITE;
 /*!40000 ALTER TABLE `articles` DISABLE KEYS */;
-INSERT INTO `articles` VALUES (1,'ADF001','Adhésif',2,'Sahel',24,'fournisseur_adhésif','2024-10-30 08:19:23',11);
+INSERT INTO `articles` VALUES (1,'ADF001','Adhésif',2.58824,'Sahel',34,'fournisseur_adhésif','2024-10-30 08:19:23',12,'None');
 /*!40000 ALTER TABLE `articles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,8 +100,9 @@ CREATE TABLE `demande_achat` (
   `etat` int NOT NULL,
   `reception` int NOT NULL,
   `commentaire` varchar(255) DEFAULT NULL,
+  `fournisseur` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`code_demande`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,16 +127,16 @@ CREATE TABLE `demande_vente` (
   `libelle_article` varchar(20) NOT NULL,
   `quantite` int NOT NULL,
   `prix_vente` decimal(6,3) DEFAULT NULL,
-  `assignation` varchar(20) NOT NULL,
+  `assignation` varchar(20) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
   `demandeur` varchar(20) DEFAULT NULL,
-  `vers` varchar(20) DEFAULT NULL,
+  `vers` varchar(20) NOT NULL,
   `commande` varchar(20) DEFAULT NULL,
   `etat` int NOT NULL,
   `reception` int NOT NULL,
   `commentaire` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`code_demande`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,6 +145,7 @@ CREATE TABLE `demande_vente` (
 
 LOCK TABLES `demande_vente` WRITE;
 /*!40000 ALTER TABLE `demande_vente` DISABLE KEYS */;
+INSERT INTO `demande_vente` VALUES (1,'ADF001','Adhésif',10,1.000,NULL,'2024-11-06 14:59:55',NULL,'bsp','x',1,0,NULL),(2,'ADF001','Adhésif',10,5.000,NULL,'2024-11-06 16:55:10',NULL,'bsp','x',0,0,NULL),(3,'ADF001','Adhésif',10,2.000,NULL,'2024-11-06 16:54:36',NULL,'bsp','x',0,0,NULL);
 /*!40000 ALTER TABLE `demande_vente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,7 +163,7 @@ CREATE TABLE `fournisseur` (
   `adresse` varchar(255) DEFAULT NULL,
   `telephone` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_fournisseur`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +172,7 @@ CREATE TABLE `fournisseur` (
 
 LOCK TABLES `fournisseur` WRITE;
 /*!40000 ALTER TABLE `fournisseur` DISABLE KEYS */;
-INSERT INTO `fournisseur` VALUES (1,'Fournisseur_x','1234','x','1234'),(2,'Fournisseur_x','1234','x','1234'),(3,'Fournisseur_a','12345','Benetton Sahel x','12345'),(4,'Fournisseur_x','1234','x','1234');
+INSERT INTO `fournisseur` VALUES (5,'Fournisseur_x','1234','x','12345');
 /*!40000 ALTER TABLE `fournisseur` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,7 +200,7 @@ CREATE TABLE `history` (
   `date_approuver_demande` timestamp NULL DEFAULT NULL,
   `date_reception` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id_history`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,7 +209,7 @@ CREATE TABLE `history` (
 
 LOCK TABLES `history` WRITE;
 /*!40000 ALTER TABLE `history` DISABLE KEYS */;
-INSERT INTO `history` VALUES (1,NULL,NULL,NULL,NULL,NULL,'Fournisseur_x',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 1234 addresse : x telephone : 1234',NULL,NULL,NULL,NULL),(2,NULL,NULL,NULL,NULL,NULL,'Fournisseur_a',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 12345 addresse : Benetton Sahel x telephone : 12345',NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,'Fournisseur_x',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 1234 addresse : x telephone : 1234',NULL,NULL,NULL,NULL);
+INSERT INTO `history` VALUES (1,NULL,NULL,NULL,NULL,NULL,'Fournisseur_x',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 1234 addresse : x telephone : 1234',NULL,NULL,NULL,NULL),(2,NULL,NULL,NULL,NULL,NULL,'Fournisseur_a',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 12345 addresse : Benetton Sahel x telephone : 12345',NULL,NULL,NULL,NULL),(3,NULL,NULL,NULL,NULL,NULL,'Fournisseur_x',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 1234 addresse : x telephone : 1234',NULL,NULL,NULL,NULL),(4,NULL,NULL,NULL,NULL,NULL,'Fournisseur_x',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 1234 addresse : x telephone : 12345',NULL,NULL,NULL,NULL),(5,NULL,'test001','test',NULL,2,'x','Sahel','ajout d\'un nouveau article',NULL,'date : 2024-11-04 11:33:18.874698+00:00quantite_min : 5',NULL,NULL,NULL,NULL),(6,NULL,NULL,NULL,NULL,NULL,'a',NULL,'ajout d\'un nouveau fournisseur',NULL,' matricule fiscale : 12 addresse : a telephone : 1',NULL,NULL,NULL,NULL),(7,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-05 15:01:21.400235+00:00',NULL,NULL,NULL,NULL),(8,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 10:12:33.047642+00:00',NULL,NULL,NULL,NULL),(9,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 10:19:03.413691+00:00',NULL,NULL,NULL,NULL),(10,NULL,'test001','test',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 10:58:00.464445+00:00',NULL,NULL,NULL,NULL),(11,NULL,'test001','test',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 11:01:12.848397+00:00',NULL,NULL,NULL,NULL),(12,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 11:07:47.388951+00:00',NULL,NULL,NULL,NULL),(13,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 11:11:21.787057+00:00',NULL,NULL,NULL,NULL),(14,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 11:15:15.387039+00:00',NULL,NULL,NULL,NULL),(15,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 12:28:53.015816+00:00',NULL,NULL,NULL,NULL),(16,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 12:29:09.232641+00:00',NULL,NULL,NULL,NULL),(17,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 12:36:06.218414+00:00',NULL,NULL,NULL,NULL),(18,NULL,'ADF001','Adhésif',NULL,NULL,NULL,'Sahel','ajout d\'un nouveau demande d\'achat',NULL,'date : 2024-11-06 12:38:16.027437+00:00',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +229,7 @@ CREATE TABLE `user` (
   `numero_telephone` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +238,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'ahmed','ahmed','sahel','admin',54391747),(3,'user','user','sahel','user',12345678),(4,'administrateur','pbkdf2:sha256:600000$8UfOir72bKr4G16n$b6e30a2bc99c12b8c1386ab005aa2a9b6c3b94763667ca726991e4d7f2f59e6f','sahel','admin',54391747),(6,'useradmin','pbkdf2:sha256:600000$ajPD3FiG9R2uGhNv$e7959d1faf1c241be81c6f001ecb973aae7be1fe134f79e7f60fb9b6302be37e','sahel','admin',1234),(8,'john','pbkdf2:sha256:600000$8CVkSfKv93lGDuDS$85868da87a26d19ed4098b3204baa495f4ba084365bc84b48284e6a82f068acc','sahel','admin',452389);
+INSERT INTO `user` VALUES (4,'administrateur','pbkdf2:sha256:600000$8UfOir72bKr4G16n$b6e30a2bc99c12b8c1386ab005aa2a9b6c3b94763667ca726991e4d7f2f59e6f','sahel','admin',54391747);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +259,7 @@ CREATE TABLE `usine` (
   `telephone` varchar(20) DEFAULT NULL,
   `etat` varchar(20) NOT NULL,
   PRIMARY KEY (`id_usine`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +268,7 @@ CREATE TABLE `usine` (
 
 LOCK TABLES `usine` WRITE;
 /*!40000 ALTER TABLE `usine` DISABLE KEYS */;
-INSERT INTO `usine` VALUES (1,'lavage','sahel','Benetton Sahel','10.680606648122179','35.77832307588124','','interne');
+INSERT INTO `usine` VALUES (1,'lavage','sahel','Benetton Sahel','10.680606648122179','35.77832307588124','1234','interne');
 /*!40000 ALTER TABLE `usine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +282,7 @@ DROP TABLE IF EXISTS `ventes`;
 CREATE TABLE `ventes` (
   `id_vente` int NOT NULL AUTO_INCREMENT,
   `code_demande` int DEFAULT NULL,
-  `code_article` int DEFAULT NULL,
+  `code_article` varchar(255) DEFAULT NULL,
   `libelle_article` varchar(20) DEFAULT NULL,
   `quantite` int DEFAULT NULL,
   `prix_vente` decimal(6,3) DEFAULT NULL,
@@ -286,7 +291,7 @@ CREATE TABLE `ventes` (
   `demandeur` varchar(20) DEFAULT NULL,
   `date` datetime DEFAULT NULL,
   PRIMARY KEY (`id_vente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,6 +300,7 @@ CREATE TABLE `ventes` (
 
 LOCK TABLES `ventes` WRITE;
 /*!40000 ALTER TABLE `ventes` DISABLE KEYS */;
+INSERT INTO `ventes` VALUES (1,3,'ADF001','Adhésif',10,2.000,NULL,'bsp',NULL,'2024-11-06 16:54:36'),(2,2,'ADF001','Adhésif',10,5.000,NULL,'bsp',NULL,'2024-11-06 16:55:10');
 /*!40000 ALTER TABLE `ventes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -307,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-31 17:03:13
+-- Dump completed on 2024-11-06 17:08:01
