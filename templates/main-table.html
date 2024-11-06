@@ -277,7 +277,13 @@
                                            
                                             <td><a class="fw-semibold">{{ demande_achat.assignation }}</a></td>
                                             
-                                            <td>{{ demande_achat.etat }}</td>
+                                            <td>
+                                                {% if demande_achat.etat == 1 %}
+                                                    <span class="badge bg-warning">En attente</span>
+                                                {% else %}
+                                                    <span class="badge bg-success">Accepter</span>
+                                                {% endif %}
+                                            </td>                                            
                                             <td>{{ demande_achat.date }}</td>
                                         </tr>
                                         {% endfor %}
@@ -331,9 +337,16 @@
                                             <td>{{ demande_vente.libelle_article }}</td>
                                             <td>{{ demande_vente.quantite }}</td>
                                             <td>{{ demande_vente.vers }}</td>
-                                            <td><a class="fw-semibold">{{ demande_vente.Commande }}</a></td>
+                                            <td><a class="fw-semibold">{{ demande_vente.commande }}</a></td>
                                             <td>{{ demande_vente.Prix }}</td>
-                                            <td>{{ demande_vente.etat }}</td>
+                                            <td>
+                                                {% if demande_vente.etat == 1 %}
+                                                    <span class="badge bg-warning">En attente</span>
+                                                {% else %}
+                                                    <span class="badge bg-success">Accepter</span>
+                                                {% endif %}
+                                            </td>
+                                            
                                             <td>{{ demande_vente.date }}</td>
                                             
                                         </tr>

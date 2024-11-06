@@ -791,6 +791,62 @@ def confirmer_reception_achat():
     # Afficher la page avec la liste des demandes d'achats
     return render_template('confirmer_reception_achat.html', demandes_achats=demandes_achats)
 
+@app.route('/ajouter_demande_vente', methods=["GET", "POST"])
+def ajouter_demande_vente():
+    if request.method == 'POST':
+        # Récupération des données du formulaire
+        demande_vente_data = {
+            'code_article': request.form.get('code_article'),
+            'libelle_article': request.form.get('libelle_article'),
+            'quantite': int(request.form.get('quantite')),          
+            'vers': request.form.get('vers'),
+            'commande': request.form.get('commande'),
+           
+        }
+
+        # Vérification de la quantité en stock
+        article = Article.query.filter_by(code_article=demande_vente_data['code_article']).first()
+        if not article:
+            message = "Article non trouvé."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_demande_vente')}";</script>"""
+
+        # Vérification si la quantité demandée est inférieure ou égale à la quantité en stock
+        if demande_vente_data['quantite'] > article.quantite:
+            message = "La quantité demandée dépasse la quantité en stock."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_demande_vente')}";</script>"""
+
+        # Appeler la fonction pour ajouter la demande de vente
+        if fun_ajouter_demande_vente(demande_vente_data):
+            message = "Demande de vente ajoutée avec succès."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('admin')}";</script>"""
+        else:
+            message = "Erreur lors de l'ajout de la demande de vente."
+            return f"""<script>alert("{message}");window.location.href = "{url_for('ajouter_demande_vente')}";</script>"""
+
+    return render_template('ajouter_demande_vente.html')
+
+def fun_ajouter_demande_vente(data):
+    try:
+        new_demande_vente = DemandeVente(
+            code_article=data['code_article'],
+            libelle_article=data['libelle_article'],
+            quantite=data['quantite'],
+            vers=data['vers'],
+            commande=data['commande'],
+            etat=1,
+            reception=1,
+        )
+        
+        db.session.add(new_demande_vente)
+        db.session.commit()
+        return True
+    except Exception as e:
+        print(f"Erreur lors de l'ajout de la demande de vente : {e}")
+        db.session.rollback()
+        return False
+
+
+
 def fun_ajouter_user(data):
     try:
         # Hash the password
@@ -1064,7 +1120,7 @@ class Achat(db.Model):
     assignation = db.Column(db.String(255), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     fournisseur = db.Column(db.String(255), nullable=False)
-
+    vendue = db.Column(db.Integer, nullable=False, default=0) 
     
 # Sales Model (Ventes)
 class Vente(db.Model):
@@ -1088,10 +1144,10 @@ class DemandeVente(db.Model):
     libelle_article = db.Column(db.String(20), nullable=False)
     quantite = db.Column(db.Integer, nullable=False)
     prix_vente = db.Column(Numeric(6, 3), nullable=True)
-    assignation = db.Column(db.String(20), nullable=False)
+    assignation = db.Column(db.String(20), nullable=True)
     date = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
     demandeur = db.Column(db.String(20), nullable=True)
-    vers = db.Column(db.String(20), nullable=True)
+    vers = db.Column(db.String(20), nullable=False)
     commande = db.Column(db.String(20), nullable=True)
     etat = db.Column(db.Integer, nullable=False)
     reception = db.Column(db.Integer, nullable=False)
