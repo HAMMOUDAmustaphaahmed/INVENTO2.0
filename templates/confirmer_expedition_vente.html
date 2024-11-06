@@ -279,78 +279,76 @@
        
             
                 
-                <div class="main-content">
-                    <div class="page-content">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                        <h4 class="mb-sm-0">Confirmer Demande Achat</h4>
-                                        <div class="page-title-right">
-                                            <ol class="breadcrumb m-0">
-                                                <li class="breadcrumb-item"><a href="/">Invento</a></li>
-                                                <li class="breadcrumb-item active">Demande Achat Details</li>
-                                            </ol>
-                                        </div>
-                                    </div>
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                                <h4 class="mb-sm-0">Confirmer Demande Vente</h4>
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/">Invento</a></li>
+                                        <li class="breadcrumb-item active">Demande Vente Details</li>
+                                    </ol>
                                 </div>
                             </div>
-        
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row gx-lg-5"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-        
-                            <<div class="table-responsive">
-                                <form action="{{ url_for('confirmer_reception_achat') }}" method="POST">
-                                    <table class="table align-middle mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col">Code Demande</th>
-                                                <th scope="col">Code Article</th>
-                                                <th scope="col">Libelle Article</th>
-                                                <th scope="col">Quantite</th>
-                                                <th scope="col">Assignation</th>
-                                                <th scope="col">Prix Achat</th>
-                                                <th scope="col">Fournisseur</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for demande_achat in demandes_achats %}
-                                            <tr>
-                                                <td><a class="fw-semibold">{{ demande_achat.code_demande }}</a></td>
-                                                <td><a class="fw-semibold">{{ demande_achat.code_article }}</a></td>
-                                                <td>{{ demande_achat.libelle_article }}</td>
-                                                <td>{{ demande_achat.quantite }}</td>
-                                                <td><a class="fw-semibold">{{ demande_achat.assignation }}</a></td>
-                                                <td>{{ demande_achat.prix_achat }}</td>
-                                                <td>{{ demande_achat.fournisseur }}</td>
-                                                <td>{{ demande_achat.date }}</td>
-                                                <td>
-                                                    <!-- Formulaire pour chaque ligne -->
-                                                    <form action="{{ url_for('confirmer_reception_achat') }}" method="POST">
-                                                        <input type="hidden" name="code_demande" value="{{ demande_achat.code_demande }}">
-                                                        <button class="btn btn-success w-100" type="submit" name="action" value="confirmer">Confirmer</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
-                            
                         </div>
                     </div>
+        
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row gx-lg-5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="table-responsive">
+                        <form action="{{ url_for('confirmer_expedition_vente') }}" method="POST">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Code Demande</th>
+                                        <th scope="col">Code Article</th>
+                                        <th scope="col">Libelle Article</th>
+                                        <th scope="col">Quantite</th>
+                                        <th scope="col">Vers</th>
+                                        <th scope="col">Commande</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for demande_vente in demandes_ventes %}
+                                    <tr>
+                                        <td><a class="fw-semibold">{{ demande_vente.code_demande }}</a></td>
+                                        <td><a class="fw-semibold">{{ demande_vente.code_article }}</a></td>
+                                        <td>{{ demande_vente.libelle_article }}</td>
+                                        <td>{{ demande_vente.quantite }}</td>
+                                        <td><a class="fw-semibold">{{ demande_vente.vers }}</a></td>
+                                        <td>{{ demande_vente.commande }}</td>
+                                        <td>{{ demande_vente.date }}</td>
+                                        <td>
+                                            <!-- Formulaire pour chaque ligne -->
+                                            <form action="{{ url_for('confirmer_expedition_vente') }}" method="POST">
+                                                <input type="hidden" name="code_demande" value="{{ demande_vente.code_demande }}">
+                                                <button class="btn btn-success w-100" type="submit" name="action" value="confirmer">Confirmer Expédition</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+        
                 </div>
-           
+            </div>
+        </div>
+        
         
         
                         <!-- container-fluid -->

@@ -765,7 +765,7 @@ def confirmer_reception_achat():
             if demande_achat.reception == 1:  # Vérifier si la réception est encore en attente
                 # Mettre à jour les informations de la demande d'achat
                 demande_achat.reception = 0  # Marquer comme reçu
-                demande_achat.etat = 1  # Mettre l'état à confirmé (par exemple)
+                demande_achat.etat = 0 # Mettre l'état à confirmé (par exemple)
                 
                 nouvel_achat = ajouter_achat(
                     code_demande=demande_achat.code_demande,
@@ -844,6 +844,144 @@ def fun_ajouter_demande_vente(data):
         print(f"Erreur lors de l'ajout de la demande de vente : {e}")
         db.session.rollback()
         return False
+
+@app.route('/rechercher_demande_vente', methods=['GET', 'POST'])
+def rechercher_demande_vente():
+        demandes_ventes=DemandeVente.query.all()
+        if request.method == 'POST':
+            code_demande = request.form.get("code_demande")
+            demande_vente = DemandeVente.query.filter_by(code_demande=code_demande).first()
+            if demande_vente:
+                return render_template('confirmer_demande_vente.html', demande_vente=demande_vente,demandes_ventes=demandes_ventes)
+            else:
+                message = "Demande vente not found."
+
+                # Return a JavaScript alert with the message and then redirect
+                return f"""<script>alert("{message}");window.location.href = "{url_for('confirmer_demande_vente')}";</script>"""
+  
+
+
+@app.route('/confirmer_demande_vente', methods=['POST', 'GET'])
+def confirmer_demande_vente():
+    demandes_ventes = DemandeVente.query.filter_by(etat=1, reception=1).all()
+    if request.method == 'POST':
+        code_demande = request.form.get('code_demande')
+        action = request.form.get('action')
+
+        demande_vente = DemandeVente.query.filter_by(code_demande=code_demande).first()
+
+        if action == 'confirmer' and demande_vente:
+            # Confirmer la demande de vente
+            demande_vente.prix_vente = float(request.form.get('prix_vente'))
+            demande_vente.etat = 0  # Marquer comme confirmé
+            demande_vente.reception = 1  # Réception marquée
+
+            try:
+                db.session.commit()
+                flash("Demande de vente confirmée avec succès.", "success")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Erreur lors de la confirmation de la demande de vente : {e}", "error")
+
+            return redirect(url_for('confirmer_demande_vente'))
+
+        elif action == 'delete' and demande_vente:
+            demande_vente.etat = 2  # Marquer comme supprimé
+            demande_vente.reception = 2
+            try:
+                db.session.commit()
+                flash("Demande de vente supprimée avec succès.", "success")
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Erreur lors de la suppression de la demande de vente : {e}", "error")
+
+            return redirect(url_for('confirmer_demande_vente'))
+
+    return render_template('confirmer_demande_vente.html', demandes_ventes=demandes_ventes)
+
+@app.route('/confirmer_expedition_vente', methods=['POST', 'GET'])
+def confirmer_expedition_vente():
+    demandes_ventes = DemandeVente.query.filter_by(etat=0, reception=1).all()  # Récupérer toutes les demandes d'achats pour l'affichage
+    
+    if request.method == 'POST':
+        code_demande = request.form.get('code_demande')
+        action = request.form.get('action')  # Récupérer l'action (ici, 'confirmer')
+        
+        # Trouver la demande d'achat correspondante
+        demande_vente = DemandeVente.query.filter_by(code_demande=code_demande).first()
+       
+        if demande_vente and action == 'confirmer':
+            if demande_vente.reception == 1:  # Vérifier si la réception est encore en attente
+                # Mettre à jour les informations de la demande d'achat
+                demande_vente.reception = 0  # Marquer comme reçu
+                demande_vente.etat = 0  # Mettre l'état à confirmé (par exemple)
+                
+                nouvel_vente = ajouter_vente(
+                    code_demande=demande_vente.code_demande,
+                    code_article=demande_vente.code_article,
+                    libelle_article=demande_vente.libelle_article,
+                    quantite=demande_vente.quantite,
+                    prix_achat=demande_vente.prix_vente,
+                    assignation=demande_vente.vers,
+                    fournisseur=demande_vente.commande
+                )
+                print(demande_vente)
+                update_article_quantity_and_pmp(demande_vente.code_article,demande_vente.quantite,demande_vente.prix_achat)
+                
+                # Valider les données et committer les mises à jour
+                try:
+                    db.session.commit()
+                    flash(f"Achat ajouté avec succès avec le lot {demande_vente.lot}", "success")
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Erreur lors de la réception de l'achat: {e}", "error")
+                return redirect(url_for('confirmer_reception_achat'))  # Rediriger vers la même page pour éviter le rechargement de la page
+
+    # Afficher la page avec la liste des demandes d'achats
+    return render_template('confirmer_reception_achat.html', demandes_achats=demandes_ventes)
+
+def ajouter_vente(code_demande, code_article, libelle_article, quantite, prix_achat, vers, commande):
+    """Ajoute un nouvel achat dans la base de données avec un numéro de lot généré automatiquement."""
+    lot = generer_lot_vente()  # Génère le lot
+    new_vente = Vente(
+        lot=lot,
+        code_demande=code_demande,
+        code_article=code_article,
+        libelle_article=libelle_article,
+        quantite=quantite,
+        prix_achat=prix_achat,
+        assignation=vers,
+        fournisseur=commande
+    )
+    print(new_vente)
+    
+    # Ajouter et committer la transaction dans la base de données
+    db.session.add(new_vente)
+    db.session.commit()
+    return new_vente
+
+
+def generer_lot_vente():
+    """Génère un numéro de lot unique en fonction de l'année, du numéro de semaine et d'une séquence."""
+    current_date = datetime.now(timezone.utc)
+    year = current_date.strftime("%Y")
+    week_number = numero_semaine(current_date)
+    
+    # Obtenir le dernier enregistrement d'achat de la même semaine et de la même année
+    dernier_vente = Vente.query.filter(Vente.lot.like(f"{year}S{str(week_number).zfill(2)}%")).order_by(Vente.lot.desc()).first()
+
+    if dernier_vente:
+        # Extraire la dernière séquence de lot
+        dernier_lot = dernier_vente.lot
+        dernier_sequence = int(dernier_lot[7:])
+        nouvelle_sequence = dernier_sequence + 1
+    else:
+        # Si aucun achat n'existe pour cette semaine, démarrer à 1
+        nouvelle_sequence = 1
+    
+    # Générer le numéro de lot
+    lot_number = f"{year}S{str(week_number).zfill(2)}{str(nouvelle_sequence).zfill(6)}"
+    return lot_number
 
 
 
