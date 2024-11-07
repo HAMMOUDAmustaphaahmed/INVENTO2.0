@@ -255,8 +255,25 @@ def supprimer_article():
     # routes.py
         
 
+@app.route('/maps')
+def maps():
+        
+            return render_template('maps.html')
+        
+        
 
+@app.route('/charts')
+def charts():
+        
+            return render_template('charts.html')
+        
 
+@app.route('/messages')
+def messages():
+        
+            return render_template('messages.html')
+        
+        
 
 @app.route('/ajouter_user', methods=['GET', 'POST'])
 def ajouter_user():
