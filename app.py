@@ -596,7 +596,7 @@ def rechercher_demande_achat():
         demandes_achats=DemandeAchat.query.all()
         if request.method == 'POST':
             code_demande = request.form.get("code_demande")
-            demande_achat = fun_info_demande_achat(code_demande,etat=1, reception=1)
+            demande_achat = fun_info_demande_achat(code_demande)
             if demande_achat:
                 return render_template('confirmer_demande_achat.html', demande_achat=demande_achat,demandes_achats=demandes_achats)
             else:
@@ -607,7 +607,7 @@ def rechercher_demande_achat():
                 
 @app.route('/confirmer_demande_achat', methods=['POST','GET'])
 def confirmer_demande_achat():
-        demandes_achats=DemandeAchat.query.filter_by(etat=1,reception=1).all()
+        demandes_achats=DemandeAchat.query.filter_by(etat=0,reception=1).all()
         code_demande = request.form.get('code_demande')
         action = request.form.get('action')  # Récupérer l'action (edit ou delete)
         demande_achat = fun_info_demande_achat(code_demande)
@@ -926,7 +926,8 @@ def confirmer_expedition_vente():
                    
                     
                 )
-                print(nouvel_vente)
+                article=Article.query.filter_by(code_aricle=demande_vente.code_article).first()
+                article.quantite=article.quantite-demande_vente.quantite
                
                 
                 # Valider les données et committer les mises à jour
@@ -1247,7 +1248,7 @@ def fun_history_editer_article(data):
     return True
     
 def fun_info_demande_achat(code_demande):
-    demande_achat_data = DemandeAchat.query.filter_by(code_demande=code_demande).first()
+    demande_achat_data = DemandeAchat.query.filter_by(code_demande=code_demande,etat=1,reception=1).first()
     return demande_achat_data
 
 def fun_info_article(code_article):
