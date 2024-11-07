@@ -926,9 +926,9 @@ def confirmer_expedition_vente():
                    
                     
                 )
-                article=Article.query.filter_by(code_aricle=demande_vente.code_article).first()
+                article=Article.query.filter_by(code_article=demande_vente.code_article).first()
                 article.quantite=article.quantite-demande_vente.quantite
-               
+                db.session.commit()
                 
                 # Valider les données et committer les mises à jour
                 try:
