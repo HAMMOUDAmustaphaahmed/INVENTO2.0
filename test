@@ -1,0 +1,33 @@
+from twilio.rest import Client
+
+# Your Twilio credentials
+account_sid = 'your_account_sid'
+auth_token = 'your_auth_token'
+
+client = Client(account_sid, auth_token)
+
+def send_whatsapp_message(to, message):
+    message = client.messages.create(
+        body=message,
+        from_='whatsapp:+14155238886',  # This is Twilio's WhatsApp sandbox number (change it if using your number)
+        to=f'whatsapp:{to}'  # The recipient's phone number, starting with "whatsapp:"
+    )
+    print(f"Message sent with SID: {message.sid}")
+
+# Example usage
+send_whatsapp_message('+1234567890', 'Hello, this is a test message from my system!')
+
+
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+
+@app.route('/notify', methods=['POST'])
+def notify():
+    # Example: Sending a notification when a request is approved
+    phone_number = request.form.get('phone')
+    message = "Your request has been approved!"
+    send_whatsapp_message(phone_number, message)
+    return jsonify({"status": "success", "message": "Notification sent!"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
